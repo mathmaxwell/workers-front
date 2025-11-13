@@ -1,6 +1,6 @@
 export interface IFilterType {
 	isOpen: boolean
-	name: string
+	full_name: string
 	gender: 'male' | 'female' | ''
 	passport_series_and_number: string
 	PINFL: string
@@ -16,7 +16,7 @@ export interface IFilterType {
 
 export enum SelectedType {
 	image = 'image',
-	name = 'name',
+	full_name = 'full_name',
 	gender = 'gender',
 	passport_series_and_number = 'passport_series_and_number',
 	PINFL = 'PINFL',
@@ -33,7 +33,7 @@ export interface IShowType {
 	sortAsc: boolean // true = по возрастанию, false = по убыванию
 	image: boolean
 	gender: boolean
-	name: boolean
+	full_name: boolean
 	passport_series_and_number: boolean
 	PINFL: boolean
 	date_of_birth: boolean

@@ -38,38 +38,49 @@ const DashboardPageCards = ({
 					cursor: 'pointer',
 					border: '1px solid',
 					borderColor: theme.palette.primary.main,
+					position: 'relative',
 				}}
 			>
-				<Typography variant='h6' sx={{ color: theme.palette.primary.main }}>
-					{t[name]}
-				</Typography>
-				<Box
+				<Typography
+					variant='h6'
 					sx={{
-						display: 'flex',
-						alignItems: 'center',
-						justifyContent: 'space-between',
-						width: '100%',
+						color: theme.palette.primary.main,
+						position: 'absolute',
+						top: 5,
+						left: 5,
 					}}
 				>
-					<Typography variant='h4'>{count}</Typography>
-					<img
-						style={{ objectFit: 'cover' }}
-						src={
-							name == 'total_employees'
-								? all
-								: name == 'on_vacation'
-								? red
-								: name === 'on_sick_leave'
-								? blue
-								: name === 'active_employees'
-								? green
-								: name == 'on_a_business_trip'
-								? yellow
-								: grey
-						}
-						alt='image'
-					/>
-				</Box>
+					{t[name]}
+				</Typography>
+
+				<Typography
+					sx={{ position: 'absolute', bottom: 5, left: 5 }}
+					variant='h4'
+				>
+					{count}
+				</Typography>
+				<img
+					style={{
+						objectFit: 'cover',
+						position: 'absolute',
+						bottom: 5,
+						right: 5,
+					}}
+					src={
+						name == 'total_employees'
+							? all
+							: name == 'on_vacation'
+							? red
+							: name === 'on_sick_leave'
+							? blue
+							: name === 'active_employees'
+							? green
+							: name == 'on_a_business_trip'
+							? yellow
+							: grey
+					}
+					alt='image'
+				/>
 			</Box>
 		</>
 	)

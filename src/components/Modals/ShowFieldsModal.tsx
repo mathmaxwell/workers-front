@@ -21,7 +21,11 @@ export const ShowFieldsModal = () => {
 		label: string
 		visible: boolean
 	}[] = [
-		{ key: SelectedType.name, label: t.full_name, visible: filter.name },
+		{
+			key: SelectedType.full_name,
+			label: t.full_name,
+			visible: filter.full_name,
+		},
 		{ key: SelectedType.image, label: t.image, visible: filter.image },
 		{ key: SelectedType.PINFL, label: t.PINFL, visible: filter.PINFL },
 		{

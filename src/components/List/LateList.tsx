@@ -10,12 +10,12 @@ import {
 import { useTranslationStore } from '../../language/useTranslationStore'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { getLateEmployees } from '../../api/employeesInfo/employeesInfo'
-import type { IEmployeesLate } from '../../types/employees/employeesType'
 import { useQuery } from '@tanstack/react-query'
+import type { ITardinessHistory } from '../../types/workSchedule/workSchedule'
 
 const LateList = () => {
 	const { token } = useTokenStore()
-	const { data: employees } = useQuery<IEmployeesLate[], Error>({
+	const { data: employees } = useQuery<ITardinessHistory[], Error>({
 		queryKey: ['employeesCountInfo', token],
 		queryFn: async () => {
 			const now = new Date()

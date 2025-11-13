@@ -3,15 +3,17 @@ import { Box } from '@mui/material'
 import DashboardPageMain from '../../components/DashboardPage/DashboardPageMain'
 import DashboardPageCards from '../../components/DashboardPage/DashboardPageCards'
 import DashboardFooter from '../../components/DashboardFooter/DashboardFooter'
-import { employeesCount } from '../../api/employeesInfo/employeesInfo'
+
 import { useQuery } from '@tanstack/react-query'
 import type { IEmployeesCount } from '../../types/employees/employeesType'
 import { useTokenStore } from '../../store/token/useTokenStore'
+import Loading from '../../components/Loading/Loading'
+import { employeesCount } from '../../api/employeesInfo/employeesInfo'
 
 const DashboardPage = () => {
 	const { token } = useTokenStore()
 	const { data: employeesCountInfo } = useQuery<IEmployeesCount, Error>({
-		queryKey: ['employeesCountInfo', token],
+		queryKey: ['employeesCount', token],
 		queryFn: async () => {
 			const now = new Date()
 			const day = now.getDate()
@@ -22,6 +24,7 @@ const DashboardPage = () => {
 		},
 		enabled: !!token,
 	})
+
 	return (
 		<>
 			<Box
@@ -33,41 +36,45 @@ const DashboardPage = () => {
 					alignItems: 'start',
 				}}
 			>
-				<Box
-					sx={{
-						display: 'flex',
-						justifyContent: 'center',
-						alignItems: 'center',
-						gap: '20px',
-						overflowY: 'auto',
-						width: 'calc(100vw - 310px)',
-					}}
-				>
-					<DashboardPageCards
-						count={employeesCountInfo?.active_employees || 0}
-						name='active_employees'
-					/>
-					<DashboardPageCards
-						count={employeesCountInfo?.absence || 0}
-						name='absence'
-					/>
-					<DashboardPageCards
-						count={employeesCountInfo?.on_a_business_trip || 0}
-						name='on_a_business_trip'
-					/>
-					<DashboardPageCards
-						count={employeesCountInfo?.on_sick_leave || 0}
-						name='on_sick_leave'
-					/>
-					<DashboardPageCards
-						count={employeesCountInfo?.on_vacation || 0}
-						name='on_vacation'
-					/>
-					<DashboardPageCards
-						count={employeesCountInfo?.total_employees || 0}
-						name='total_employees'
-					/>
-				</Box>
+				{employeesCountInfo === undefined ? (
+					<Loading />
+				) : (
+					<Box
+						sx={{
+							display: 'flex',
+							justifyContent: 'center',
+							alignItems: 'center',
+							gap: '20px',
+							overflowY: 'auto',
+							width: 'calc(100vw - 310px)',
+						}}
+					>
+						<DashboardPageCards
+							count={employeesCountInfo.active_employees}
+							name='active_employees'
+						/>
+						<DashboardPageCards
+							count={employeesCountInfo.absence}
+							name='absence'
+						/>
+						<DashboardPageCards
+							count={employeesCountInfo.on_a_business_trip}
+							name='on_a_business_trip'
+						/>
+						<DashboardPageCards
+							count={employeesCountInfo.on_sick_leave}
+							name='on_sick_leave'
+						/>
+						<DashboardPageCards
+							count={employeesCountInfo.on_vacation}
+							name='on_vacation'
+						/>
+						<DashboardPageCards
+							count={employeesCountInfo.total_employees}
+							name='total_employees'
+						/>
+					</Box>
+				)}
 				<DashboardPageMain />
 				<DashboardFooter />
 			</Box>

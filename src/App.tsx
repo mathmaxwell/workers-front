@@ -8,6 +8,9 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import Dashboard from './pages/dashboard/Dashboard'
 import { FilterModal } from './components/Modals/FilterModal'
 import { ShowFieldsModal } from './components/Modals/ShowFieldsModal'
+import { CreateEmployeesModal } from './components/Modals/CreateEmployeesModal'
+import BasePage from './pages/BasePage/BasePage'
+import EmployeesPage from './pages/employees/EmployeesPage'
 
 function App() {
 	const { theme } = useThemeStore()
@@ -18,12 +21,15 @@ function App() {
 				<CssBaseline />
 				<Routes>
 					<Route path='/' element={<Dashboard />} />
-					<Route path='/:id' element={<Dashboard />} />
+					<Route path='/dashboard' element={<Dashboard />} />
+					<Route path='/base' element={<BasePage />} />
+					<Route path='/employees/:id' element={<EmployeesPage />} />
 					<Route path='/register' element={<Register />} />
 				</Routes>
 			</ThemeProvider>
 			<FilterModal />
 			<ShowFieldsModal />
+			<CreateEmployeesModal />
 		</>
 	)
 }

@@ -8,24 +8,27 @@ export interface IEmployeesCount {
 	absence: number
 	total_employees: number
 }
-export interface IEmployeesLate {
-	id: string
-	fullName: string
-	department: string
-	position: string
-	lateTime: number
-	Email: string
-	phone_number: string
-	work_schedule: string
-	day: number
-	month: number
-	year: number
-	date: Date
-}
+// export interface IEmployeesLate {
+// 	id: string
+// 	fullName: string
+// 	department: string
+// 	position: string
+// 	lateTime: number
+// 	Email: string
+// 	phone_number: string
+// 	work_schedule: string
+// 	day: number
+// 	month: number
+// 	year: number
+// 	date: Date
+// }
 
 export interface IEmployees {
 	id: string
-	fullName: string
+	gender: 'male' | 'female'
+	passport_series_and_number: string
+	PINFL: string
+	full_name: string
 	image: string
 	department: string
 	position: string
@@ -42,5 +45,5 @@ export interface IEmployees {
 	nationality: string
 	Email: string
 	phone_number: string
-	work_schedule: string
+	work_schedule: 'full_time' | 'remote' | 'shift' | 'universal'
 }

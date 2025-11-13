@@ -1,5 +1,5 @@
 import { eachDayOfInterval, isSameDay } from 'date-fns'
-import type { IEmployeesLate } from '../types/employees/employeesType'
+import type { ITardinessHistory } from '../types/workSchedule/workSchedule'
 
 export const getTodayRange = () => {
 	const now = new Date()
@@ -74,12 +74,11 @@ export const getNextWeekRange = (date: Date) => {
 }
 
 export const getLateStatsArray = (
-	employees: IEmployeesLate[] = [],
+	employees: ITardinessHistory[] = [],
 	startDate: Date,
 	endDate: Date
 ) => {
 	const allDays = eachDayOfInterval({ start: startDate, end: endDate })
-
 	const stats = allDays.map(day => {
 		const count = employees.filter(e => isSameDay(new Date(e.date), day)).length
 		return count

@@ -14,11 +14,15 @@ import ManageSearchIcon from '@mui/icons-material/ManageSearch'
 import { useFilterModalStore } from '../../store/modal/useFilterModalStore'
 import { useShowListStore } from '../../store/list/useListStore'
 import SettingsIcon from '@mui/icons-material/Settings'
+import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModal'
+
 const BaseFilter = () => {
 	const { setFilter, filter } = useFilterModalStore()
 	const { t } = useTranslationStore()
 	const theme = useTheme()
+	const { openModal } = useEmployeesModalStore()
 	const { setFilter: setShowFilter } = useShowListStore()
+
 	return (
 		<>
 			<Box
@@ -58,9 +62,9 @@ const BaseFilter = () => {
 						}}
 					>
 						<InputBase
-							value={filter.name}
+							value={filter.full_name}
 							onChange={e => {
-								setFilter({ name: e.target.value })
+								setFilter({ full_name: e.target.value })
 							}}
 							sx={{ ml: 2, flex: 1 }}
 							placeholder={t.search_by_name}
@@ -100,6 +104,9 @@ const BaseFilter = () => {
 						<TuneIcon />
 					</Button>
 					<Button
+						onClick={() => {
+							openModal()
+						}}
 						variant='outlined'
 						sx={{
 							display: 'flex',

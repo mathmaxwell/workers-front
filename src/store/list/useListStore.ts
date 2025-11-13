@@ -10,11 +10,11 @@ interface IListState {
 
 const initialFilter: IShowType = {
 	isOpenModal: false,
-	sortField: SelectedType.name,
+	sortField: SelectedType.full_name,
 	sortAsc: true,
 	image: true,
 	gender: false,
-	name: true,
+	full_name: true,
 	passport_series_and_number: false,
 	PINFL: false,
 	date_of_birth: false,

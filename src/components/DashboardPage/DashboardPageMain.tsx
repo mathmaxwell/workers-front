@@ -7,16 +7,17 @@ import DashboardPageChard from './DashboardPageChard'
 import { useDateRangeStore } from '../../store/useDateStore'
 import { getLateStatsArray, getMonthRange } from '../../functions/dataFn'
 import DashboardPageShowSelectedDate from './DashboardPageShowSelectedDate'
-import type { IEmployeesLate } from '../../types/employees/employeesType'
+
 import { useQuery } from '@tanstack/react-query'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { getLateEmployees } from '../../api/employeesInfo/employeesInfo'
 import { useMemo } from 'react'
+import type { ITardinessHistory } from '../../types/workSchedule/workSchedule'
 
 const DashboardPageMain = () => {
 	const { token } = useTokenStore()
 	const { startDate, endDate } = useDateRangeStore()
-	const { data: employees } = useQuery<IEmployeesLate[], Error>({
+	const { data: employees } = useQuery<ITardinessHistory[], Error>({
 		queryKey: ['EmployeesLate', token, startDate, endDate],
 		queryFn: async () => {
 			const result = await getLateEmployees({

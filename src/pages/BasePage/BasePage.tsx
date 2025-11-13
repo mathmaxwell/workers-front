@@ -1,20 +1,37 @@
-import { Box } from '@mui/material'
+import { Box, useTheme } from '@mui/material'
 import BaseFilter from '../../components/BasePage/BaseFilter'
 import EmployeesList from '../../components/BasePage/EmployeesList'
+import SiteBar from '../../components/SiteBar'
 
 const BasePage = () => {
+	const theme = useTheme()
 	return (
 		<>
 			<Box
 				sx={{
-					width: 'calc(100vw - 310px)',
+					position: 'relative',
+					height: '100vh',
+					width: '100vw',
+					p: '20px',
+					bgcolor: theme.palette.background.default,
 					display: 'flex',
-					flexDirection: 'column',
+					alignItems: 'start',
+					justifyContent: 'start',
 					gap: '20px',
 				}}
 			>
-				<BaseFilter />
-				<EmployeesList />
+				<SiteBar />
+				<Box
+					sx={{
+						width: 'calc(100vw - 310px)',
+						display: 'flex',
+						flexDirection: 'column',
+						gap: '20px',
+					}}
+				>
+					<BaseFilter />
+					<EmployeesList />
+				</Box>
 			</Box>
 		</>
 	)

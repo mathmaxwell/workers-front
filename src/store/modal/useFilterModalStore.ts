@@ -12,7 +12,7 @@ interface FilterModalState {
 const initialFilter: IFilterType = {
 	isOpen: false,
 	gender: '',
-	name: '',
+	full_name: '',
 	passport_series_and_number: '',
 	PINFL: '',
 	date_of_birth: 0,

@@ -1,14 +1,13 @@
 import { Box, useTheme } from '@mui/material'
 import SiteBar from '../../components/SiteBar'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import DashboardPage from '../dashboardPage/DashboardPage'
-import BasePage from '../BasePage/BasePage'
+
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useEffect } from 'react'
 
 const Dashboard = () => {
 	const navigate = useNavigate()
-	const { id } = useParams()
 	const theme = useTheme()
 	const { token } = useTokenStore()
 	useEffect(() => {
@@ -32,7 +31,7 @@ const Dashboard = () => {
 				}}
 			>
 				<SiteBar />
-				{id == 'base' ? <BasePage /> : <DashboardPage />}
+				<DashboardPage />
 			</Box>
 		</>
 	)

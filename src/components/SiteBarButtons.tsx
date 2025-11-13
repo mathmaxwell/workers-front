@@ -1,14 +1,14 @@
 import { Button, useTheme } from '@mui/material'
 import dashboardSvg from '../assets/icons/dashboardSvg.svg'
 import base from '../assets/icons/base.svg'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslationStore } from '../language/useTranslationStore'
 
 const SiteBarButtons = ({ name }: { name: 'dashboard' | 'base' }) => {
 	const { t } = useTranslationStore()
-	const { id } = useParams()
+	const { pathname } = useLocation()
+	const isHere = pathname == `/${name}`
 	const navigate = useNavigate()
-	const isHere = id == name
 	const theme = useTheme()
 	return (
 		<>

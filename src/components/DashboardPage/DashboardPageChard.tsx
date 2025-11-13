@@ -3,23 +3,10 @@ import ChartDataLabels from 'chartjs-plugin-datalabels'
 import ChartJS from 'chart.js/auto'
 import type { ChartOptions, ChartData } from 'chart.js'
 import { useTheme } from '@mui/material'
+import { monthNames } from '../../types/time/time'
+import { useTranslationStore } from '../../language/useTranslationStore'
 
 ChartJS.register(ChartDataLabels)
-
-export const monthNames = [
-	'Январь',
-	'Февраль',
-	'Март',
-	'Апрель',
-	'Май',
-	'Июнь',
-	'Июль',
-	'Август',
-	'Сентябрь',
-	'Октябрь',
-	'Ноябрь',
-	'Декабрь',
-]
 
 const getDaysInMonth = (month: number, year: number = 2025) => {
 	return new Date(year, month + 1, 0).getDate()
@@ -34,6 +21,7 @@ const DashboardPageChard = ({
 	month?: number
 	onBarClick?: (dateStr: string) => void
 }) => {
+	const t = useTranslationStore()
 	const today = new Date()
 	let labels: string[]
 	let datasetLabel: string
@@ -53,7 +41,7 @@ const DashboardPageChard = ({
 	} else {
 		const daysInMonth = getDaysInMonth(month)
 		labels = Array.from({ length: daysInMonth }, (_, i) => (i + 1).toString())
-		datasetLabel = `Значения за ${monthNames[month]}`
+		datasetLabel = `Значения за ${[monthNames[month]]}`
 		for (let i = 0; i < daysInMonth; i++) {
 			const date = new Date(today.getFullYear(), month, i + 1)
 			dates.push(date.toLocaleDateString('ru-RU').split('.').join('-'))

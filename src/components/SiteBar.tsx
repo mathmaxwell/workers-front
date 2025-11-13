@@ -96,9 +96,8 @@ const SiteBar = () => {
 			>
 				FaceIDS
 			</Typography>
-			{siteBarButtonArray.map((btn, index) => (
-				<SiteBarButtons name={btn.name} key={index} />
-			))}
+			<SiteBarButtons name={'dashboard'} />
+			<SiteBarButtons name={'base'} />
 		</Box>
 	)
 }
