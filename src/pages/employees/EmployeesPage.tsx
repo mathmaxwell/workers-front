@@ -9,12 +9,14 @@ import Loading from '../../components/Loading/Loading'
 import { useTranslationStore } from '../../language/useTranslationStore'
 
 import ReadOnlyTexField from '../../components/textField/ReadOnlyTexField'
-import { useEffect, useState } from 'react'
-import { ShowFieldsModal } from '../../components/Modals/ShowFieldsModal'
+import { useState } from 'react'
+
 import ShowWorkSchedule from '../../components/workSchedule/ShowWorkSchedule'
 import ShowTardinessHistory from '../../components/history/ShowTardinessHistory'
 import ShowCorrespondence from '../../components/correspondence/ShowCorrespondence'
+import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModal'
 const EmployeesPage = () => {
+	const { setEmployee, openModal } = useEmployeesModalStore()
 	const [showElement, setShowElement] = useState<
 		| 'full_information'
 		| 'work_schedule'
@@ -91,7 +93,11 @@ const EmployeesPage = () => {
 							}}
 						>
 							<img
-								src={Employee.image}
+								src={
+									typeof Employee.image === 'string'
+										? Employee.image
+										: URL.createObjectURL(Employee.image)
+								}
 								alt='image'
 								style={{
 									backgroundColor: 'red',
@@ -193,7 +199,7 @@ const EmployeesPage = () => {
 							</Button>
 						</ButtonGroup>
 						{/* information */}
-						<Box>
+						<Box sx={{ height: '54vh' }}>
 							{showElement === 'full_information' ? (
 								<Box
 									sx={{
@@ -220,10 +226,40 @@ const EmployeesPage = () => {
 									/>
 									<ReadOnlyTexField
 										label={t.date_of_birth}
-										textField={`${Employee.date_of_birth}.${Employee.birth_month}.${Employee.year_of_birth}`}
+										textField={`${Employee.date_of_birth
+											.toString()
+											.padStart(2, '0')}.${Employee.birth_month
+											.toString()
+											.padStart(2, '0')}.${Employee.year_of_birth}`}
 									/>
 									<ReadOnlyTexField label={t.status} textField={status} />
-									<Button variant='outlined'>{t.edit}</Button>
+									<Button
+										onClick={() => {
+											openModal()
+											setEmployee({
+												mode: 'update',
+												full_name: Employee.full_name,
+												passport_series_and_number:
+													Employee.passport_series_and_number,
+												PINFL: Employee.PINFL,
+												image: Employee.image,
+												date_of_birth: Employee.date_of_birth,
+												birth_month: Employee.birth_month,
+												year_of_birth: Employee.year_of_birth,
+												gender: Employee.gender,
+												phone_number: Employee.phone_number,
+												Email: Employee.Email,
+												place_of_birth: Employee.place_of_birth,
+												nationality: Employee.nationality,
+												department: Employee.department,
+												id: Employee.id,
+												position: Employee.position,
+											})
+										}}
+										variant='outlined'
+									>
+										{t.edit}
+									</Button>
 									<Button variant='outlined'>{t.change_status}</Button>
 								</Box>
 							) : showElement === 'correspondence' ? (

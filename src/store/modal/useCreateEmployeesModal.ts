@@ -11,8 +11,9 @@ interface EmployeesModalState {
 
 const initialEmployee: IEmployees & { isOpen: boolean } = {
 	isOpen: false,
+	mode: 'update',
 	id: '',
-	fullName: '',
+	full_name: '',
 	image: '',
 	gender: 'male',
 	department: '',

@@ -8,7 +8,7 @@ export async function login({
 	password: string
 }) {
 	try {
-		const result = await api.post('/read-user', { login, password })
+		const result = await api.post('/users/login', { login, password })
 		return result.data
 	} catch (error: any) {
 		if (error.response) {

@@ -12,11 +12,11 @@ import RedoIcon from '@mui/icons-material/Redo'
 
 const DashboardPageShowSelectedDate = () => {
 	const { startDate, endDate, setStartDate, setEndDate } = useDateRangeStore()
-
 	const { start: monthStart, end: monthEnd } = getMonthRange(startDate)
 	const isWholeMonthSelected =
 		startDate.getTime() === monthStart.getTime() &&
 		endDate.getTime() === monthEnd.getTime()
+
 	return (
 		<>
 			<Box
@@ -50,8 +50,16 @@ const DashboardPageShowSelectedDate = () => {
 						justifyContent: 'center',
 					}}
 				>
-					<Typography>{startDate.toISOString().slice(0, 10)}</Typography>
-					<Typography>{endDate.toISOString().slice(0, 10)}</Typography>
+					<Typography>
+						{startDate.getDate().toString().padStart(2, '0')}.
+						{(startDate.getMonth() + 1).toString().padStart(2, '0')}.
+						{startDate.getFullYear()}
+					</Typography>
+					<Typography>
+						{endDate.getDate().toString().padStart(2, '0')}.
+						{(endDate.getMonth() + 1).toString().padStart(2, '0')}.
+						{endDate.getFullYear()}
+					</Typography>
 				</Box>
 				<Button
 					onClick={() => {

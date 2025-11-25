@@ -12,11 +12,14 @@ import {
 } from '@mui/material'
 import { useTranslationStore } from '../../language/useTranslationStore'
 import { useQuery } from '@tanstack/react-query'
-import type { IEmployees } from '../../types/employees/employeesType'
+import type {
+	IEmployees,
+	IEmployeesCount,
+} from '../../types/employees/employeesType'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import {
+	employeesCount,
 	getEmployees,
-	getEmployeesCount,
 } from '../../api/employeesInfo/employeesInfo'
 import { useState } from 'react'
 import { useShowListStore } from '../../store/list/useListStore'
@@ -25,6 +28,7 @@ import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import { useNavigate } from 'react-router-dom'
 import Loading from '../Loading/Loading'
+import { useFilterModalStore } from '../../store/modal/useFilterModalStore'
 const EmployeesList = () => {
 	const { token } = useTokenStore()
 	const { t } = useTranslationStore()
@@ -46,7 +50,7 @@ const EmployeesList = () => {
 		setPage(0)
 	}
 	const { filter, setFilter } = useShowListStore()
-
+	const { filter: search } = useFilterModalStore()
 	const { data: Employees } = useQuery<IEmployees[], Error>({
 		queryKey: [
 			'Employees',
@@ -55,6 +59,8 @@ const EmployeesList = () => {
 			rowsPerPage,
 			filter.sortField,
 			filter.sortAsc,
+			search.isOpen,
+			search.full_name,
 		],
 		queryFn: async () => {
 			const result = await getEmployees({
@@ -63,16 +69,21 @@ const EmployeesList = () => {
 				count: rowsPerPage,
 				sortField: filter.sortField,
 				sortAsc: filter.sortAsc,
+				filter: search,
 			})
 			return result || []
 		},
 		enabled: !!token,
 	})
-	const { data: EmployeesCount } = useQuery<number, Error>({
+	const { data: EmployeesCount, isLoading } = useQuery<IEmployeesCount, Error>({
 		queryKey: ['EmployeesCount', token],
 		queryFn: async () => {
-			const result = await getEmployeesCount({
+			const now = new Date()
+			const result = await employeesCount({
 				token,
+				day: now.getDay(),
+				month: now.getMonth() + 1,
+				year: now.getFullYear(),
 			})
 			return result
 		},
@@ -147,7 +158,9 @@ const EmployeesList = () => {
 			sortable: false,
 		},
 	]
-
+	if (isLoading) {
+		return <Loading />
+	}
 	return (
 		<Box
 			sx={{
@@ -209,49 +222,51 @@ const EmployeesList = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{Employees ? (
-								Employees.map((emp, index) => (
-									<TableRow
-										key={emp.id || index}
-										onClick={() => {
-											navigate(`/employees/${emp.id}`)
-										}}
-									>
-										{columns.map(
-											col =>
-												col.visible &&
-												(col.key === 'image' ? (
-													<TableCell key={col.key}>
-														<img src={emp.image} alt='image' />
-													</TableCell>
-												) : col.key === 'gender' ? (
-													<TableCell key={col.key}>{t[emp.gender]}</TableCell>
-												) : col.key === 'work_schedule' ? (
-													<TableCell key={col.key}>
-														{t[emp.work_schedule]}
-													</TableCell>
-												) : col.key === 'date_of_birth' ? (
-													<TableCell key={col.key}>
-														{emp.date_of_birth}.{emp.birth_month}.
-														{emp.year_of_birth}
-													</TableCell>
-												) : (
-													<TableCell key={col.key}>
-														{emp[col.key as keyof typeof emp]}
-													</TableCell>
-												))
-										)}
-									</TableRow>
-								))
-							) : (
-								<Loading />
-							)}
+							{Employees?.map((emp, index) => (
+								<TableRow
+									key={emp.id || index}
+									onClick={() => {
+										navigate(`/employees/${emp.id}`)
+									}}
+								>
+									{columns.map(
+										col =>
+											col.visible &&
+											(col.key === 'image' ? (
+												<TableCell key={col.key}>
+													<img
+														src={
+															typeof emp.image === 'string'
+																? emp.image
+																: URL.createObjectURL(emp.image)
+														}
+														alt='image'
+													/>
+												</TableCell>
+											) : col.key === 'gender' ? (
+												<TableCell key={col.key}>{t[emp.gender]}</TableCell>
+											) : col.key === 'work_schedule' ? (
+												<TableCell key={col.key}>{emp.work_schedule}</TableCell>
+											) : col.key === 'date_of_birth' ? (
+												<TableCell key={col.key}>
+													{emp.date_of_birth.toString().padStart(2, '0')}.
+													{emp.birth_month.toString().padStart(2, '0')}.
+													{emp.year_of_birth}
+												</TableCell>
+											) : (
+												<TableCell key={col.key}>
+													{String(emp[col.key as keyof typeof emp])}
+												</TableCell>
+											))
+									)}
+								</TableRow>
+							))}
 						</TableBody>
 					</Table>
 					<TablePagination
 						labelRowsPerPage={t.rows_per_page}
 						component='div'
-						count={EmployeesCount || 0}
+						count={EmployeesCount?.total_employees || 0}
 						page={page}
 						onPageChange={handleChangePage}
 						rowsPerPage={rowsPerPage}

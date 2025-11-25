@@ -3,13 +3,32 @@ import dashboardSvg from '../assets/icons/dashboardSvg.svg'
 import base from '../assets/icons/base.svg'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useTranslationStore } from '../language/useTranslationStore'
-
-const SiteBarButtons = ({ name }: { name: 'dashboard' | 'base' }) => {
+import NotificationsIcon from '@mui/icons-material/Notifications'
+import { useQuery } from '@tanstack/react-query'
+import { getUnreadMessages } from '../api/message/message'
+import { useTokenStore } from '../store/token/useTokenStore'
+import type { IMessage } from '../types/messages/message'
+const SiteBarButtons = ({
+	name,
+}: {
+	name: 'dashboard' | 'base' | 'messages'
+}) => {
 	const { t } = useTranslationStore()
 	const { pathname } = useLocation()
 	const isHere = pathname == `/${name}`
 	const navigate = useNavigate()
 	const theme = useTheme()
+	const { token } = useTokenStore()
+	const { data: unreadMessagesCount } = useQuery<IMessage[]>({
+		queryKey: ['unreadMessagesCount', token],
+		queryFn: async () => {
+			const result = await getUnreadMessages({ token })
+			return result || []
+		},
+		enabled: !!token,
+	})
+	const isMessage =
+		unreadMessagesCount == undefined ? false : unreadMessagesCount?.length > 0
 	return (
 		<>
 			<Button
@@ -28,7 +47,15 @@ const SiteBarButtons = ({ name }: { name: 'dashboard' | 'base' }) => {
 					navigate(`/${name}`)
 				}}
 			>
-				<img src={name == 'dashboard' ? dashboardSvg : base} alt='image' />
+				{name == 'messages' ? (
+					<NotificationsIcon
+						sx={{ width: '24px', height: '24px' }}
+						color={isMessage ? 'error' : 'info'}
+					/>
+				) : (
+					<img src={name == 'dashboard' ? dashboardSvg : base} alt='image' />
+				)}
+
 				{t[name]}
 			</Button>
 		</>

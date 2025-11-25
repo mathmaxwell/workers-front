@@ -11,6 +11,8 @@ import { ShowFieldsModal } from './components/Modals/ShowFieldsModal'
 import { CreateEmployeesModal } from './components/Modals/CreateEmployeesModal'
 import BasePage from './pages/BasePage/BasePage'
 import EmployeesPage from './pages/employees/EmployeesPage'
+import Messages from './pages/messages/Messages'
+import CreateWorkScheduleModal from './components/Modals/CreateWorkScheduleModal'
 
 function App() {
 	const { theme } = useThemeStore()
@@ -23,6 +25,8 @@ function App() {
 					<Route path='/' element={<Dashboard />} />
 					<Route path='/dashboard' element={<Dashboard />} />
 					<Route path='/base' element={<BasePage />} />
+					<Route path='/messages' element={<Messages />} />
+					<Route path='/messages/:id' element={<Messages />} />
 					<Route path='/employees/:id' element={<EmployeesPage />} />
 					<Route path='/register' element={<Register />} />
 				</Routes>
@@ -30,6 +34,7 @@ function App() {
 			<FilterModal />
 			<ShowFieldsModal />
 			<CreateEmployeesModal />
+			<CreateWorkScheduleModal />
 		</>
 	)
 }

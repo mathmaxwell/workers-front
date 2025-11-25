@@ -5,7 +5,11 @@ import DashboardSelectDate from './DashboardSelectDate'
 import DashboardPageAverageCards from './DashboardPageAverageCards'
 import DashboardPageChard from './DashboardPageChard'
 import { useDateRangeStore } from '../../store/useDateStore'
-import { getLateStatsArray, getMonthRange } from '../../functions/dataFn'
+import {
+	getLateStatsArray,
+	getLostTime,
+	getMonthRange,
+} from '../../functions/dataFn'
 import DashboardPageShowSelectedDate from './DashboardPageShowSelectedDate'
 
 import { useQuery } from '@tanstack/react-query'
@@ -30,8 +34,11 @@ const DashboardPageMain = () => {
 		enabled: !!token,
 	})
 	const totalLateTime =
-		employees?.reduce((sum, info) => sum + info.lateTime, 0) ?? 0
-
+		employees?.reduce(
+			(sum, info) =>
+				sum + (getLostTime(info).color === 'red' ? -getLostTime(info).diff : 0),
+			0
+		) ?? 0
 	const informationArray = useMemo(() => {
 		if (!employees) return []
 		return getLateStatsArray(employees, startDate, endDate)
@@ -75,7 +82,7 @@ const DashboardPageMain = () => {
 			>
 				<DashboardPageChard
 					informationArray={informationArray}
-					month={isWholeMonthSelected ? startDate.getMonth() + 1 : undefined}
+					month={isWholeMonthSelected ? startDate.getMonth() : undefined}
 					onBarClick={(dataStr: string) => {
 						console.log('dataStr', dataStr)
 					}}

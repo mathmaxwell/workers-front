@@ -1,10 +1,11 @@
 import type {
 	ITardinessHistory,
 	IWorkSchedule,
+	IWorkScheduleForDay,
 } from '../../types/workSchedule/workSchedule'
 import api from '../api'
 
-export async function getEmployeeWorkSchedule({
+export async function getEmployeeWorkScheduleForMonth({
 	token,
 	id,
 	startMonthSchedule,
@@ -14,9 +15,9 @@ export async function getEmployeeWorkSchedule({
 	id: string
 	startMonthSchedule: number
 	startYearSchedule: number
-}): Promise<IWorkSchedule[]> {
+}): Promise<IWorkSchedule> {
 	try {
-		const { data } = await api.post('/employees/getEmployeeWorkSchedule', {
+		const { data } = await api.post('/workSchedule/getWorkScheduleForMonth', {
 			token,
 			id,
 			startMonthSchedule,
@@ -24,38 +25,7 @@ export async function getEmployeeWorkSchedule({
 		})
 		return data
 	} catch (error: any) {
-		return [
-			{
-				startDay: 1,
-				startMonth: startMonthSchedule,
-				startYear: startYearSchedule,
-				endDay: 1,
-				endMonth: startMonthSchedule,
-				endYear: startYearSchedule,
-				workSchedule: [
-					{
-						startHour: 9,
-						startDay: 2,
-						startMonth: startMonthSchedule,
-						startYear: startYearSchedule,
-						endHour: 18,
-						endDay: 2,
-						endMonth: startMonthSchedule,
-						endYear: startYearSchedule,
-					},
-					{
-						startHour: 9,
-						startDay: 3,
-						startMonth: startMonthSchedule,
-						startYear: startYearSchedule,
-						endHour: 18,
-						endDay: 3,
-						endMonth: startMonthSchedule,
-						endYear: startYearSchedule,
-					},
-				],
-			},
-		]
+		throw new Error('Неизвестная ошибка')
 	}
 }
 
@@ -82,6 +52,31 @@ export async function getTardinessHistoryById({
 			startYearSchedule,
 			endMonthSchedule,
 			endYearSchedule,
+		})
+		return data
+	} catch (error: any) {
+		return []
+	}
+}
+export async function updateWorkSchedule({
+	token,
+	workSchedule,
+}: {
+	token: string
+	workSchedule: IWorkScheduleForDay
+}): Promise<ITardinessHistory[]> {
+	try {
+		const { data } = await api.post('/workSchedule/updateWorkSchedule', {
+			token,
+			id: workSchedule.id || 'test',
+			startHour: workSchedule.startHour,
+			startDay: workSchedule.startDay,
+			startMonth: workSchedule.startMonth,
+			startYear: workSchedule.startYear,
+			endHour: workSchedule.endHour,
+			endDay: workSchedule.endDay,
+			endMonth: workSchedule.endMonth,
+			endYear: workSchedule.endYear,
 		})
 		return data
 	} catch (error: any) {

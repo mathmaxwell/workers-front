@@ -1,4 +1,5 @@
 export interface IWorkScheduleForDay {
+	id: string
 	startHour: number
 	startDay: number
 	startMonth: number
@@ -18,13 +19,13 @@ export interface IWorkSchedule {
 	workSchedule: IWorkScheduleForDay[]
 }
 export interface ITardinessHistory {
-	lateTime: number
+	id: string
 	date: Date
 	fullName: string
 	department: string
-	day: string
-	month: string
-	year: string
+	day: number
+	month: number
+	year: number
 	workSchedule: IWorkScheduleForDay
 	entryHour: number
 	entryMinute: number

@@ -7,7 +7,7 @@ import UzbekSvg from '../assets/svg/Uzbak'
 import RussiaSvg from '../assets/svg/Russia'
 import { useTranslationStore } from '../language/useTranslationStore'
 import SiteBarButtons from './SiteBarButtons'
-import { siteBarButtonArray } from '../functions/exports'
+
 const SiteBar = () => {
 	const { lang, setLang } = useTranslationStore()
 	const { theme: darkOrLigth, setTheme } = useThemeStore()
@@ -98,6 +98,7 @@ const SiteBar = () => {
 			</Typography>
 			<SiteBarButtons name={'dashboard'} />
 			<SiteBarButtons name={'base'} />
+			<SiteBarButtons name={'messages'} />
 		</Box>
 	)
 }

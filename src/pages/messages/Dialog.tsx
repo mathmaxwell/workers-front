@@ -1,21 +1,24 @@
+import { Box, useTheme } from '@mui/material'
+import { useParams } from 'react-router-dom'
+import { useTranslationStore } from '../../language/useTranslationStore'
 import { useQuery } from '@tanstack/react-query'
 import type { IMessage } from '../../types/messages/message'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { getMessageWithUser, readedMessage } from '../../api/message/message'
+import Divider from '@mui/material/Divider'
 import { useEffect, useRef, useState } from 'react'
-import { Box, Divider, useTheme } from '@mui/material'
-import { useTranslationStore } from '../../language/useTranslationStore'
-import ShowChatText from '../messages/ShowChatText'
-import MessageTextField from '../messages/MessageTextField'
+import MessageTextField from '../../components/messages/MessageTextField'
+import ShowChatText from '../../components/messages/ShowChatText'
 
-const ShowCorrespondence = ({ id }: { id: string }) => {
+const Dialog = () => {
 	let lastDay = 0
-	const [sendedMessages, setSendedMessages] = useState<IMessage[]>([])
-	const { token } = useTokenStore()
 	const theme = useTheme()
+	const { token } = useTokenStore()
+	const { id } = useParams()
 	const { t } = useTranslationStore()
-	const { data: messagesWithUser } = useQuery<IMessage[]>({
-		queryKey: ['messagesWithUser', token, id],
+	const [sendedMessages, setSendedMessages] = useState<IMessage[]>([])
+	const { data: messageWithUser } = useQuery<IMessage[]>({
+		queryKey: ['messageWithUser', token, id],
 		queryFn: async () => {
 			if (!id) {
 				return []
@@ -37,7 +40,8 @@ const ShowCorrespondence = ({ id }: { id: string }) => {
 	const messagesEndRef = useRef<HTMLDivElement | null>(null)
 	useEffect(() => {
 		messagesEndRef.current?.scrollIntoView({ behavior: 'auto', block: 'end' })
-	}, [messagesWithUser])
+	}, [messageWithUser])
+
 	return (
 		<>
 			<Box
@@ -61,7 +65,7 @@ const ShowCorrespondence = ({ id }: { id: string }) => {
 							overflowY: 'auto',
 						}}
 					>
-						{messagesWithUser?.map((msg, ind) => {
+						{messageWithUser?.map((msg, ind) => {
 							let showDate = msg.sentDay != lastDay
 							if (showDate) {
 								lastDay = msg.sentDay
@@ -88,4 +92,4 @@ const ShowCorrespondence = ({ id }: { id: string }) => {
 	)
 }
 
-export default ShowCorrespondence
+export default Dialog

@@ -86,3 +86,29 @@ export const getLateStatsArray = (
 
 	return stats
 }
+export function getLostTime(late: ITardinessHistory): {
+	color: 'yellow' | 'green' | 'red'
+	diff: number
+} {
+	const normStart = late.workSchedule.startHour * 60
+	const normEnd = late.workSchedule.endHour * 60
+	const normWorked = normEnd - normStart
+	const factStart = late.entryHour * 60 + late.entryMinute
+	const factEnd = late.exitHour * 60 + late.exitMinute
+	const factWorked = factEnd - factStart
+	const diff = factWorked - normWorked
+	let color: 'yellow' | 'green' | 'red' = 'yellow'
+	if (diff > 0) {
+		color = 'green'
+	} else if (diff < 0) {
+		color = 'red'
+	} else {
+		if (factStart !== normStart || factEnd !== normEnd) {
+			color = 'yellow'
+		} else {
+			color = 'green'
+		}
+	}
+
+	return { color, diff }
+}

@@ -4,7 +4,6 @@ import ChartJS from 'chart.js/auto'
 import type { ChartOptions, ChartData } from 'chart.js'
 import { useTheme } from '@mui/material'
 import { monthNames } from '../../types/time/time'
-import { useTranslationStore } from '../../language/useTranslationStore'
 
 ChartJS.register(ChartDataLabels)
 
@@ -21,7 +20,6 @@ const DashboardPageChard = ({
 	month?: number
 	onBarClick?: (dateStr: string) => void
 }) => {
-	const t = useTranslationStore()
 	const today = new Date()
 	let labels: string[]
 	let datasetLabel: string

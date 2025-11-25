@@ -1,19 +1,9 @@
 import { Box, useTheme } from '@mui/material'
 import SiteBar from '../../components/SiteBar'
-import { useNavigate } from 'react-router-dom'
-import DashboardPage from '../dashboardPage/DashboardPage'
-import { useTokenStore } from '../../store/token/useTokenStore'
-import { useEffect } from 'react'
-
-const Dashboard = () => {
-	const navigate = useNavigate()
+import SelectPenPal from './SelectPenPal'
+import Dialog from './Dialog'
+const Messages = () => {
 	const theme = useTheme()
-	const { token } = useTokenStore()
-	useEffect(() => {
-		if (!token) {
-			navigate('/register')
-		}
-	}, [token])
 	return (
 		<>
 			<Box
@@ -30,10 +20,22 @@ const Dashboard = () => {
 				}}
 			>
 				<SiteBar />
-				<DashboardPage />
+				<Box
+					sx={{
+						width: 'calc(100vw - 310px)',
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						gap: '20px',
+						height: '100%',
+					}}
+				>
+					<SelectPenPal />
+					<Dialog />
+				</Box>
 			</Box>
 		</>
 	)
 }
 
-export default Dashboard
+export default Messages

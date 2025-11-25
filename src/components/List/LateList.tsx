@@ -52,7 +52,7 @@ const LateList = () => {
 											{row.department}
 										</TableCell>
 										<TableCell sx={{ textAlign: 'right' }}>
-											{row.lateTime}
+											{row.day}
 										</TableCell>
 									</TableRow>
 								)

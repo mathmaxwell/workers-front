@@ -18,9 +18,10 @@ import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModa
 
 const BaseFilter = () => {
 	const { setFilter, filter } = useFilterModalStore()
+
 	const { t } = useTranslationStore()
 	const theme = useTheme()
-	const { openModal } = useEmployeesModalStore()
+	const { openModal, setEmployee } = useEmployeesModalStore()
 	const { setFilter: setShowFilter } = useShowListStore()
 
 	return (
@@ -51,10 +52,14 @@ const BaseFilter = () => {
 					}}
 				>
 					<Paper
+						onSubmit={e => {
+							e.preventDefault()
+						}}
 						component='form'
 						sx={{
 							display: 'flex',
 							alignItems: 'center',
+
 							width: 350,
 							border: '1px solid',
 							borderColor: theme.palette.primary.main,
@@ -106,6 +111,7 @@ const BaseFilter = () => {
 					<Button
 						onClick={() => {
 							openModal()
+							setEmployee({ mode: 'create' })
 						}}
 						variant='outlined'
 						sx={{

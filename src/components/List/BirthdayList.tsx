@@ -11,14 +11,37 @@ import { useTranslationStore } from '../../language/useTranslationStore'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useQuery } from '@tanstack/react-query'
 import type { IEmployees } from '../../types/employees/employeesType'
-import { getBirthdaysThisMonth } from '../../api/employeesInfo/employeesInfo'
-import { months } from '../../types/filterType'
+
+import { months, SelectedType } from '../../types/filterType'
+import { getEmployees } from '../../api/employeesInfo/employeesInfo'
 const BirthdayList = () => {
 	const { token } = useTokenStore()
-	const { data: employeesCountInfo } = useQuery<IEmployees[], Error>({
-		queryKey: ['employeesCountInfo', token],
+	const { data: employeesBirthday } = useQuery<IEmployees[], Error>({
+		queryKey: ['employeesBirthday', token],
 		queryFn: async () => {
-			const result = await getBirthdaysThisMonth({ token })
+			const now = new Date()
+			const result = await getEmployees({
+				token,
+				page: 1,
+				count: 10,
+				sortField: SelectedType.date_of_birth,
+				sortAsc: true,
+				filter: {
+					isOpen: false,
+					full_name: '',
+					gender: '',
+					passport_series_and_number: '',
+					PINFL: '',
+					date_of_birth: 0,
+					birth_month: now.getMonth() + 1,
+					year_of_birth: 0,
+					place_of_birth: '',
+					nationality: '',
+					department: '',
+					position: '',
+					work_schedule: '',
+				},
+			})
 			return result || []
 		},
 		enabled: !!token,
@@ -38,17 +61,17 @@ const BirthdayList = () => {
 							</TableRow>
 						</TableHead>
 						<TableBody>
-							{employeesCountInfo?.map((row, index) => {
+							{employeesBirthday?.map((row, index) => {
 								return (
 									<TableRow hover role='checkbox' tabIndex={-1} key={index}>
 										<TableCell sx={{ textAlign: 'left' }}>
-											{row.fullName}
+											{row.full_name}
 										</TableCell>
 										<TableCell sx={{ textAlign: 'center' }}>
 											{row.department}
 										</TableCell>
 										<TableCell sx={{ textAlign: 'right' }}>
-											{row.date_of_birth}-{t[months[row.birth_month]]}
+											{row.date_of_birth}-{t[months[row.birth_month - 1]]}
 										</TableCell>
 									</TableRow>
 								)
