@@ -112,3 +112,19 @@ export function getLostTime(late: ITardinessHistory): {
 
 	return { color, diff }
 }
+export function calculateEndDateTime(
+	startYear: number,
+	startMonth: number,
+	startDay: number,
+	startHour: number,
+	workHours: number
+) {
+	const start = new Date(startYear, startMonth - 1, startDay, startHour, 0, 0)
+	const end = new Date(start.getTime() + workHours * 60 * 60 * 1000)
+	return {
+		endYear: end.getFullYear(),
+		endMonth: end.getMonth() + 1,
+		endDay: end.getDate(),
+		endHour: end.getHours(),
+	}
+}

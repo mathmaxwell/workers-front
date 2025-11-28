@@ -23,6 +23,8 @@ import { useState } from 'react'
 import { monthNames } from '../../types/time/time'
 import Loading from '../Loading/Loading'
 import { useWorkScheduleModalStore } from '../../store/modal/useWorkScheduleState'
+import type { IStatus } from '../../types/filterType'
+import { getStatusById } from '../../api/employeesInfo/employeesInfo'
 
 const ShowWorkSchedule = ({ id }: { id: string }) => {
 	const { t } = useTranslationStore()
@@ -37,7 +39,8 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 
 	const [startMonthSchedule, setStartMonthSchedule] = useState<number>(
 		new Date().getMonth()
-	)
+	) //[0, 11]
+
 	const [startYearSchedule, setStartYearSchedule] = useState<number>(
 		new Date().getFullYear()
 	)
@@ -62,6 +65,21 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 				id,
 				startMonthSchedule: startMonthSchedule + 1,
 				startYearSchedule,
+			})
+			return result
+		},
+		enabled: !!token && !!id,
+	})
+	const { data: EmployeeStatus } = useQuery<IStatus[], Error>({
+		queryKey: ['EmployeeStatus', token, id],
+		queryFn: async () => {
+			if (!id) {
+				navigate('/base')
+				throw new Error('No id provided')
+			}
+			const result = await getStatusById({
+				token,
+				id,
 			})
 			return result
 		},
@@ -144,9 +162,11 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 						<TableBody>
 							{(() => {
 								const year = startYearSchedule
-								const month = startMonthSchedule
+								const month = startMonthSchedule //[0, 11]
 								const date = new Date(year, month, 1)
+
 								const daysInMonth = new Date(year, month + 1, 0).getDate()
+
 								const weeks: (number | null)[][] = []
 								let week: (number | null)[] = new Array(7).fill(null)
 								const jsDay = (date.getDay() + 6) % 7
@@ -176,6 +196,21 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 													)
 												}
 											)
+											const current = new Date(
+												startYearSchedule,
+												startMonthSchedule + 1,
+												day
+											)
+											const status = EmployeeStatus?.find(s => {
+												const start = new Date(
+													s.startYear,
+													s.startMonth,
+													s.startDay
+												)
+												const end = new Date(s.endYear, s.endMonth, s.endDay)
+												return start <= current && current <= end
+											})
+
 											return (
 												<TableCell
 													key={dIndex}
@@ -186,54 +221,68 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 																s.startMonth === startMonthSchedule + 1 &&
 																s.startYear === startYearSchedule
 														)
+															? 'green'
+															: status?.status == 'on_a_business_trip'
+															? 'error.main'
+															: status?.status === 'on_sick_leave'
+															? 'error.main'
+															: status?.status === 'on_vacation'
 															? 'error.main'
 															: '',
 													}}
 													onClick={() => {
-														let item: IWorkScheduleForDay
-														if (work !== undefined) {
-															item = work
-														} else {
-															item = {
-																id: '',
-																startHour: 0,
-																startDay: day!,
-																startMonth: startMonthSchedule + 1,
-																startYear: startYearSchedule,
-																endHour: 0,
-																endDay: day!,
-																endMonth: startMonthSchedule + 1,
-																endYear: startYearSchedule,
+														if (!status?.status.length) {
+															let item: IWorkScheduleForDay
+															if (work !== undefined) {
+																item = work
+															} else {
+																item = {
+																	id: '',
+																	startHour: 0,
+																	startDay: day!,
+																	startMonth: startMonthSchedule + 1,
+																	startYear: startYearSchedule,
+																	endHour: 0,
+																	endDay: day!,
+																	endMonth: startMonthSchedule + 1,
+																	endYear: startYearSchedule,
+																}
 															}
-														}
-														const current = modal.schedule
-														const isSelected = current.some(
-															s =>
-																s.startDay === item.startDay &&
-																s.startMonth === item.startMonth &&
-																s.startYear === item.startYear
-														)
-
-														let newSchedule: IWorkScheduleForDay[]
-														if (isSelected) {
-															newSchedule = current.filter(
+															const current = modal.schedule
+															const isSelected = current.some(
 																s =>
-																	!(
-																		s.startDay === item.startDay &&
-																		s.startMonth === item.startMonth &&
-																		s.startYear === item.startYear
-																	)
+																	s.startDay === item.startDay &&
+																	s.startMonth === item.startMonth &&
+																	s.startYear === item.startYear
 															)
-														} else {
-															newSchedule = [...current, item]
+
+															let newSchedule: IWorkScheduleForDay[]
+															if (isSelected) {
+																newSchedule = current.filter(
+																	s =>
+																		!(
+																			s.startDay === item.startDay &&
+																			s.startMonth === item.startMonth &&
+																			s.startYear === item.startYear
+																		)
+																)
+															} else {
+																newSchedule = [...current, item]
+															}
+															setSchedule({ schedule: newSchedule })
 														}
-														setSchedule({ schedule: newSchedule })
 													}}
 												>
 													<strong>{day}</strong>
 													<br />
 													{work
 														? `${work.startHour}:00 - ${work.endHour}:00`
+														: status?.status === 'on_a_business_trip'
+														? t.on_a_business_trip
+														: status?.status === 'on_sick_leave'
+														? t.on_sick_leave
+														: status?.status == 'on_vacation'
+														? t.on_vacation
 														: t.weekend}
 												</TableCell>
 											)

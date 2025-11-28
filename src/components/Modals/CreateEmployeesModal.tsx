@@ -74,7 +74,6 @@ export const CreateEmployeesModal = () => {
 					phone_number: employee.phone_number,
 				})
 			}
-
 			closeModal()
 		} catch (error) {}
 	}

@@ -14,7 +14,9 @@ import type { IEmployees } from '../../types/employees/employeesType'
 
 import { months, SelectedType } from '../../types/filterType'
 import { getEmployees } from '../../api/employeesInfo/employeesInfo'
+import { useNavigate } from 'react-router-dom'
 const BirthdayList = () => {
+	const navigate = useNavigate()
 	const { token } = useTokenStore()
 	const { data: employeesBirthday } = useQuery<IEmployees[], Error>({
 		queryKey: ['employeesBirthday', token],
@@ -63,7 +65,15 @@ const BirthdayList = () => {
 						<TableBody>
 							{employeesBirthday?.map((row, index) => {
 								return (
-									<TableRow hover role='checkbox' tabIndex={-1} key={index}>
+									<TableRow
+										hover
+										role='checkbox'
+										tabIndex={-1}
+										key={index}
+										onClick={() => {
+											navigate(`/employees/${row.id}`)
+										}}
+									>
 										<TableCell sx={{ textAlign: 'left' }}>
 											{row.full_name}
 										</TableCell>

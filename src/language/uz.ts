@@ -111,5 +111,12 @@ const uz = {
 	selected_days: 'Tanlangan kunlar',
 	select_all: 'Hammasini tanlash',
 	working_hours: 'Ish vaqti',
+	start_day: 'Boshlanish kuni',
+	start_month: 'Boshlanish oyi',
+	start_year: 'Boshlanish yili',
+	end_day: 'Tugash kuni',
+	end_month: 'Tugash oyi',
+	end_year: 'Tugash yili',
+	schedules: 'Ish jadvali',
 }
 export default uz

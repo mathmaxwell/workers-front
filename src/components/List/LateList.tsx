@@ -12,8 +12,10 @@ import { useTokenStore } from '../../store/token/useTokenStore'
 import { getLateEmployees } from '../../api/employeesInfo/employeesInfo'
 import { useQuery } from '@tanstack/react-query'
 import type { ITardinessHistory } from '../../types/workSchedule/workSchedule'
+import { useNavigate } from 'react-router-dom'
 
 const LateList = () => {
+	const navigate = useNavigate()
 	const { token } = useTokenStore()
 	const { data: employees } = useQuery<ITardinessHistory[], Error>({
 		queryKey: ['employeesCountInfo', token],
@@ -44,16 +46,21 @@ const LateList = () => {
 						<TableBody>
 							{employees?.map((row, index) => {
 								return (
-									<TableRow hover role='checkbox' key={index}>
+									<TableRow
+										hover
+										role='checkbox'
+										key={index}
+										onClick={() => {
+											navigate(`/employees/${row.id}`)
+										}}
+									>
 										<TableCell sx={{ textAlign: 'left' }}>
 											{row.fullName}
 										</TableCell>
 										<TableCell sx={{ textAlign: 'center' }}>
 											{row.department}
 										</TableCell>
-										<TableCell sx={{ textAlign: 'right' }}>
-											{row.day}
-										</TableCell>
+										<TableCell sx={{ textAlign: 'right' }}>{row.day}</TableCell>
 									</TableRow>
 								)
 							})}

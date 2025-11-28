@@ -1,5 +1,4 @@
 import { Box, Typography, useTheme } from '@mui/material'
-
 import all from '../../assets/images/all.png'
 import blue from '../../assets/images/blue.png'
 import green from '../../assets/images/green.png'
@@ -7,6 +6,11 @@ import grey from '../../assets/images/grey.png'
 import red from '../../assets/images/red.png'
 import yellow from '../../assets/images/yellow.png'
 import { useTranslationStore } from '../../language/useTranslationStore'
+import { useEmployeesStore } from '../../store/modal/useEmployeesModal'
+import { getEmployeesByStatus } from '../../api/employeesInfo/employeesInfo'
+import { useTokenStore } from '../../store/token/useTokenStore'
+import { useNavigate } from 'react-router-dom'
+
 const DashboardPageCards = ({
 	name,
 	count,
@@ -22,9 +26,33 @@ const DashboardPageCards = ({
 }) => {
 	const { t } = useTranslationStore()
 	const theme = useTheme()
+	const { token } = useTokenStore()
+	const { open, setIds, setText } = useEmployeesStore()
+	const navigate = useNavigate()
 	return (
 		<>
 			<Box
+				onClick={async () => {
+					if (name === 'total_employees') {
+						navigate('/base')
+					} else {
+						const now = new Date()
+						const result = await getEmployeesByStatus({
+							token,
+							status: name,
+							day: now.getDate(),
+							month: now.getMonth() + 1,
+							year: now.getFullYear(),
+						})
+						setIds(
+							result.map(ids => {
+								return { id: ids, description: '' }
+							})
+						)
+						setText(t[name])
+						open()
+					}
+				}}
 				sx={{
 					display: 'flex',
 					flexDirection: 'column',

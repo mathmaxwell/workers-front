@@ -28,7 +28,6 @@ export async function getEmployeeWorkScheduleForMonth({
 		throw new Error('Неизвестная ошибка')
 	}
 }
-
 export async function getTardinessHistoryById({
 	token,
 	id,

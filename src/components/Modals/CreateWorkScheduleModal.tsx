@@ -11,8 +11,9 @@ import { useWorkScheduleModalStore } from '../../store/modal/useWorkScheduleStat
 import { useTranslationStore } from '../../language/useTranslationStore'
 import { updateWorkSchedule } from '../../api/workSchedule/workSchedule'
 import { useTokenStore } from '../../store/token/useTokenStore'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import NumberField from '../fields/NumberField'
+import { calculateEndDateTime } from '../../functions/dataFn'
 const CreateWorkScheduleModal = () => {
 	const theme = useTheme()
 	const { schedule, closeModal, setSchedule } = useWorkScheduleModalStore()
@@ -20,7 +21,40 @@ const CreateWorkScheduleModal = () => {
 	const { token } = useTokenStore()
 	const hours = Array.from({ length: 24 }, (_, i) => i)
 	const [startWorkHour, setStartWorkHour] = useState<number>(9)
-	const [workHour, setWorkHour] = useState<number | null>(9)
+	const [workHour, setWorkHour] = useState<number>(9)
+	const [isHoliday, setIsHoliday] = useState<boolean>(false)
+	useEffect(() => {
+		const first = schedule.schedule[0]
+		if (!first) return
+		if (isHoliday) {
+			setSchedule({
+				schedule: schedule.schedule.map(item => ({
+					...item,
+					startHour: 99,
+					endHour: 99,
+				})),
+			})
+		} else {
+			const { endYear, endMonth, endDay, endHour } = calculateEndDateTime(
+				first.startYear,
+				first.startMonth,
+				first.startDay,
+				startWorkHour,
+				workHour
+			)
+			setSchedule({
+				schedule: schedule.schedule.map(item => ({
+					...item,
+					startHour: startWorkHour,
+					endHour,
+					endDay,
+					endMonth,
+					endYear,
+				})),
+			})
+		}
+	}, [isHoliday, startWorkHour, workHour])
+
 	return (
 		<>
 			<Modal
@@ -60,6 +94,7 @@ const CreateWorkScheduleModal = () => {
 					>
 						<TextField
 							select
+							disabled={isHoliday}
 							size='small'
 							label={t.work_start_time}
 							sx={{ width: '200px' }}
@@ -75,8 +110,9 @@ const CreateWorkScheduleModal = () => {
 						<NumberField
 							value={workHour}
 							onValueChange={e => {
-								setWorkHour(e)
+								setWorkHour(e || 0)
 							}}
+							disabled={isHoliday}
 							size='small'
 							label={t.working_hours}
 							min={1}
@@ -84,16 +120,10 @@ const CreateWorkScheduleModal = () => {
 						/>
 						<Button
 							onClick={() => {
-								setSchedule({
-									schedule: schedule.schedule.map(item => ({
-										...item,
-										startHour: 99,
-										endHour: 99,
-									})),
-								})
+								setIsHoliday(prev => !prev)
 							}}
 							sx={{ ml: 'auto' }}
-							variant='outlined'
+							variant={isHoliday ? 'outlined' : 'contained'}
 						>
 							{t.weekend}
 						</Button>
@@ -132,9 +162,9 @@ const CreateWorkScheduleModal = () => {
 											.padStart(2, '0')}.${sch.startYear}`}
 									</Typography>
 									<Typography>
-										{sch.endHour != 99 && sch.startHour != 99
-											? `${sch.startHour}:00 - ${sch.endHour}:00`
-											: t.weekend}
+										{(sch.endHour == 99 && sch.startHour == 99) || isHoliday
+											? t.weekend
+											: `${sch.startHour}:00 - ${sch.endHour}:00`}
 									</Typography>
 								</Box>
 							)

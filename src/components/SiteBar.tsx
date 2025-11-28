@@ -99,6 +99,7 @@ const SiteBar = () => {
 			<SiteBarButtons name={'dashboard'} />
 			<SiteBarButtons name={'base'} />
 			<SiteBarButtons name={'messages'} />
+			<SiteBarButtons name={'schedules'} />
 		</Box>
 	)
 }

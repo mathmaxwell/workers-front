@@ -13,6 +13,9 @@ import BasePage from './pages/BasePage/BasePage'
 import EmployeesPage from './pages/employees/EmployeesPage'
 import Messages from './pages/messages/Messages'
 import CreateWorkScheduleModal from './components/Modals/CreateWorkScheduleModal'
+import ShowEmployees from './components/Modals/ShowEmployees'
+import ChangeStatus from './components/Modals/ChangeStatus'
+import Schedules from './pages/Schedules/Schedules'
 
 function App() {
 	const { theme } = useThemeStore()
@@ -28,10 +31,13 @@ function App() {
 					<Route path='/messages' element={<Messages />} />
 					<Route path='/messages/:id' element={<Messages />} />
 					<Route path='/employees/:id' element={<EmployeesPage />} />
+					<Route path='/schedules' element={<Schedules />} />
 					<Route path='/register' element={<Register />} />
 				</Routes>
 			</ThemeProvider>
 			<FilterModal />
+			<ChangeStatus />
+			<ShowEmployees />
 			<ShowFieldsModal />
 			<CreateEmployeesModal />
 			<CreateWorkScheduleModal />

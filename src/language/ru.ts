@@ -109,5 +109,12 @@ const ru = {
 	selected_days: 'Выбранные дни',
 	select_all: 'Выбрать все',
 	working_hours: 'Время работы',
+	start_day: 'День начала',
+	start_month: 'Месяц начала',
+	start_year: 'Год начала',
+	end_day: 'День окончания',
+	end_month: 'Месяц окончания',
+	end_year: 'Год окончания',
+	schedules: 'Графики',
 }
 export default ru

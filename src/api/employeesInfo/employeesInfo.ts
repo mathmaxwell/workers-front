@@ -2,7 +2,7 @@ import type {
 	IEmployees,
 	IEmployeesCount,
 } from '../../types/employees/employeesType'
-import type { IFilterType, SelectedType } from '../../types/filterType'
+import type { IFilterType, IStatus, SelectedType } from '../../types/filterType'
 import type { ITardinessHistory } from '../../types/workSchedule/workSchedule'
 import api from '../api'
 
@@ -236,6 +236,93 @@ export async function getEmployeesById({
 			id,
 		})
 		return data
+	} catch (error: any) {
+		throw new Error('Неизвестная ошибка')
+	}
+}
+export async function getEmployeesByStatus({
+	token,
+	status,
+	day,
+	month,
+	year,
+}: {
+	token: string
+	status:
+		| 'active_employees'
+		| 'on_vacation'
+		| 'on_sick_leave'
+		| 'on_a_business_trip'
+		| 'absence'
+		| 'total_employees'
+	day: number
+	month: number
+	year: number
+}): Promise<string[]> {
+	try {
+		const { data } = await api.post('/employees/getEmployeesByStatus', {
+			token,
+			status,
+			day,
+			month,
+			year,
+		})
+		return data.ids
+	} catch (error: any) {
+		throw new Error('Неизвестная ошибка')
+	}
+}
+export async function getStatusById({
+	token,
+	id,
+}: {
+	token: string
+	id: string
+}): Promise<IStatus[]> {
+	try {
+		const { data } = await api.post('/employees/getStatusById', {
+			token,
+			id,
+		})
+		return data
+	} catch (error: any) {
+		throw new Error('Неизвестная ошибка')
+	}
+}
+export async function createStatus({
+	token,
+	id,
+	startDay,
+	startMonth,
+	startYear,
+	endDay,
+	endMonth,
+	endYear,
+	status,
+}: {
+	token: string
+	id: string
+	startDay: number
+	startMonth: number
+	startYear: number
+	endDay: number
+	endMonth: number
+	endYear: number
+	status: 'on_vacation' | 'on_sick_leave' | 'on_a_business_trip'
+}): Promise<IStatus> {
+	try {
+		const { data } = await api.post('/employees/createStatus', {
+			token,
+			id,
+			startDay,
+			startMonth,
+			startYear,
+			endDay,
+			endMonth,
+			endYear,
+			status,
+		})
+		return data as IStatus
 	} catch (error: any) {
 		throw new Error('Неизвестная ошибка')
 	}

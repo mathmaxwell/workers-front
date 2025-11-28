@@ -13,7 +13,15 @@ export interface IFilterType {
 	position: string
 	work_schedule: string
 }
-
+export interface IStatus {
+	status: 'on_vacation' | 'on_sick_leave' | 'on_a_business_trip'
+	startDay: number
+	startMonth: number
+	startYear: number
+	endDay: number
+	endMonth: number
+	endYear: number
+}
 export enum SelectedType {
 	image = 'image',
 	full_name = 'full_name',

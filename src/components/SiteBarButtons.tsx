@@ -8,10 +8,11 @@ import { useQuery } from '@tanstack/react-query'
 import { getUnreadMessages } from '../api/message/message'
 import { useTokenStore } from '../store/token/useTokenStore'
 import type { IMessage } from '../types/messages/message'
+import EditCalendarIcon from '@mui/icons-material/EditCalendar'
 const SiteBarButtons = ({
 	name,
 }: {
-	name: 'dashboard' | 'base' | 'messages'
+	name: 'dashboard' | 'base' | 'messages' | 'schedules'
 }) => {
 	const { t } = useTranslationStore()
 	const { pathname } = useLocation()
@@ -51,6 +52,14 @@ const SiteBarButtons = ({
 					<NotificationsIcon
 						sx={{ width: '24px', height: '24px' }}
 						color={isMessage ? 'error' : 'info'}
+					/>
+				) : name === 'schedules' ? (
+					<EditCalendarIcon
+						sx={{
+							color: isHere
+								? theme.palette.background.default
+								: theme.palette.primary.main,
+						}}
 					/>
 				) : (
 					<img src={name == 'dashboard' ? dashboardSvg : base} alt='image' />

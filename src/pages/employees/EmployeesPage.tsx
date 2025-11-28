@@ -15,7 +15,10 @@ import ShowWorkSchedule from '../../components/workSchedule/ShowWorkSchedule'
 import ShowTardinessHistory from '../../components/history/ShowTardinessHistory'
 import ShowCorrespondence from '../../components/correspondence/ShowCorrespondence'
 import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModal'
+import { useChangeStatus } from '../../store/modal/useChangeStatus'
+
 const EmployeesPage = () => {
+	const { open, setId } = useChangeStatus()
 	const { setEmployee, openModal } = useEmployeesModalStore()
 	const [showElement, setShowElement] = useState<
 		| 'full_information'
@@ -43,6 +46,7 @@ const EmployeesPage = () => {
 		},
 		enabled: !!token && !!id,
 	})
+
 	const status = Employee?.on_sick_leave
 		? t.on_sick_leave
 		: Employee?.on_a_business_trip
@@ -260,7 +264,15 @@ const EmployeesPage = () => {
 									>
 										{t.edit}
 									</Button>
-									<Button variant='outlined'>{t.change_status}</Button>
+									<Button
+										variant='outlined'
+										onClick={() => {
+											open()
+											setId(Employee.id)
+										}}
+									>
+										{t.change_status}
+									</Button>
 								</Box>
 							) : showElement === 'correspondence' ? (
 								<ShowCorrespondence id={id || ''} />

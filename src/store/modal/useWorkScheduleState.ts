@@ -22,7 +22,6 @@ const initialEmployee: EmployeesModalData = {
 export const useWorkScheduleModalStore = create<EmployeesWorkScheduleState>(
 	set => ({
 		schedule: initialEmployee,
-
 		setSchedule: data =>
 			set(state => ({
 				schedule: { ...state.schedule, ...data },

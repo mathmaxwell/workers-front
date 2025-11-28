@@ -1,5 +1,4 @@
 import { Box, useTheme } from '@mui/material'
-
 import DashboardShowTotal from './DashboardShowTotal'
 import DashboardSelectDate from './DashboardSelectDate'
 import DashboardPageAverageCards from './DashboardPageAverageCards'
@@ -17,10 +16,21 @@ import { useTokenStore } from '../../store/token/useTokenStore'
 import { getLateEmployees } from '../../api/employeesInfo/employeesInfo'
 import { useMemo } from 'react'
 import type { ITardinessHistory } from '../../types/workSchedule/workSchedule'
+import { useEmployeesStore } from '../../store/modal/useEmployeesModal'
+import { useTranslationStore } from '../../language/useTranslationStore'
 
 const DashboardPageMain = () => {
+	const theme = useTheme()
+	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
 	const { startDate, endDate } = useDateRangeStore()
+	const { start: monthStart, end: monthEnd } = getMonthRange(startDate)
+	const isWholeMonthSelected =
+		startDate.getTime() === monthStart.getTime() &&
+		endDate.getTime() === monthEnd.getTime()
+
+	const { open, setIds, setText } = useEmployeesStore()
+
 	const { data: employees } = useQuery<ITardinessHistory[], Error>({
 		queryKey: ['EmployeesLate', token, startDate, endDate],
 		queryFn: async () => {
@@ -33,22 +43,18 @@ const DashboardPageMain = () => {
 		},
 		enabled: !!token,
 	})
+
 	const totalLateTime =
-		employees?.reduce(
-			(sum, info) =>
-				sum + (getLostTime(info).color === 'red' ? -getLostTime(info).diff : 0),
-			0
-		) ?? 0
+		employees?.reduce((sum, info) => {
+			return (
+				sum + (getLostTime(info).color === 'red' ? -getLostTime(info).diff : 0)
+			)
+		}, 0) ?? 0
 	const informationArray = useMemo(() => {
 		if (!employees) return []
 		return getLateStatsArray(employees, startDate, endDate)
 	}, [employees, startDate, endDate])
 
-	const { start: monthStart, end: monthEnd } = getMonthRange(startDate)
-	const isWholeMonthSelected =
-		startDate.getTime() === monthStart.getTime() &&
-		endDate.getTime() === monthEnd.getTime()
-	const theme = useTheme()
 	return (
 		<Box
 			sx={{
@@ -83,8 +89,20 @@ const DashboardPageMain = () => {
 				<DashboardPageChard
 					informationArray={informationArray}
 					month={isWholeMonthSelected ? startDate.getMonth() : undefined}
-					onBarClick={(dataStr: string) => {
-						console.log('dataStr', dataStr)
+					onBarClick={async (dataStr: string) => {
+						if (employees !== undefined) {
+							setIds(
+								employees.map(ids => {
+									const diff = getLostTime(ids).diff
+									return {
+										id: ids.id,
+										description: `${t.late_time}: ${-diff} ${t.minute} `,
+									}
+								})
+							)
+						}
+						setText(dataStr)
+						open()
 					}}
 				/>
 				<DashboardPageAverageCards totalTime={totalLateTime} />
