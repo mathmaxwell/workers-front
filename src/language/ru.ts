@@ -124,6 +124,6 @@ const ru = {
 	configure_individually: 'Настроить индивидуально',
 	start_date: 'Дата начала',
 	end_date: 'Дата окончания',
-	
+	select_again: 'Выбрать заново',
 }
 export default ru

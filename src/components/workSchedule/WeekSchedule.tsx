@@ -28,7 +28,6 @@ import type { Dayjs } from 'dayjs'
 import { useEmployeesSchedule } from '../../store/modal/useEmployeesSchedule'
 import { updateWorkSchedule } from '../../api/workSchedule/workSchedule'
 import { useTokenStore } from '../../store/token/useTokenStore'
-
 export default function WeekSchedule({
 	startDate,
 	endDate,
@@ -46,7 +45,6 @@ export default function WeekSchedule({
 	const [selectedId, setSelectedId] = useState<DayId | null>(null)
 	const selected = selectedId ? schedule.find(s => s.id === selectedId)! : null
 	const holiday = selected ? isHoliday(selected) : false
-
 	const toggleHoliday = () => {
 		if (!selectedId) return
 		setSchedule(prev =>
@@ -123,7 +121,9 @@ export default function WeekSchedule({
 				<Button
 					variant={holiday ? 'contained' : 'outlined'}
 					color={holiday ? 'error' : 'primary'}
-					onClick={toggleHoliday}
+					onClick={() => {
+						toggleHoliday()
+					}}
 					disabled={!selected}
 				>
 					{holiday ? t.work_schedule : t.weekend}

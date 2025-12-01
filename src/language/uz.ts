@@ -126,5 +126,6 @@ const uz = {
 	configure_individually: 'Individual tarzda sozlash',
 	start_date: 'Boshlanish sanasi',
 	end_date: 'Tugash sanasi',
+	select_again: 'Qayta tanlash',
 }
 export default uz

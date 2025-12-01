@@ -14,7 +14,6 @@ import { a11yProps, CustomTabPanel } from '../../functions/MuiFn'
 import { DataGrid, type GridColDef } from '@mui/x-data-grid'
 import WeekSchedule from '../workSchedule/WeekSchedule'
 import MonthSchedule from '../workSchedule/MonthSchedule'
-import IndividuallySchedule from '../workSchedule/IndividuallySchedule'
 import SelectPeriod from '../workSchedule/SelectPeriod'
 import type { Dayjs } from 'dayjs'
 import dayjs from 'dayjs'
@@ -104,7 +103,6 @@ const UpdateSchedule = () => {
 							<Tab label={t.selected_employees} {...a11yProps(0)} />
 							<Tab label={t.configure_weekly} {...a11yProps(1)} />
 							<Tab label={t.configure_monthly} {...a11yProps(2)} />
-							<Tab label={t.configure_individually} {...a11yProps(3)} />
 						</Tabs>
 						<CustomTabPanel value={value} index={0}>
 							<Paper sx={{ width: '100%', height: 530, overflowY: 'auto' }}>
@@ -132,16 +130,7 @@ const UpdateSchedule = () => {
 								setStartDate={setStartDate}
 								setEndDate={setEndDate}
 							/>
-							<MonthSchedule />
-						</CustomTabPanel>
-						<CustomTabPanel value={value} index={3}>
-							<SelectPeriod
-								startDate={startDate}
-								endDate={endDate}
-								setStartDate={setStartDate}
-								setEndDate={setEndDate}
-							/>
-							<IndividuallySchedule />
+							<MonthSchedule startDate={startDate} endDate={endDate} />
 						</CustomTabPanel>
 					</Box>
 				</Box>

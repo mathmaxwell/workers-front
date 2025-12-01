@@ -92,7 +92,8 @@ export const defaultSchedule: IWorkScheduleForDay[] = [
 	createHoliday('sunday'),
 ]
 export const isHoliday = (day: IWorkScheduleForDay) =>
-	day.startHour === 0 && day.endHour === 0
+	(day.startHour === 0 && day.endHour === 0) ||
+	(day.startHour === 99 && day.endHour === 99)
 export const formatTime = (day: IWorkScheduleForDay) => {
 	if (isHoliday(day)) return null
 	if (day.endHour > 24) {
