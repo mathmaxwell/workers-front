@@ -1,8 +1,6 @@
 import {
 	Avatar,
 	Box,
-	Button,
-	Divider,
 	List,
 	ListItem,
 	ListItemAvatar,
@@ -21,6 +19,7 @@ import { useEffect, useState } from 'react'
 import { getEmployeesById } from '../../api/employeesInfo/employeesInfo'
 import type { IEmployees } from '../../types/employees/employeesType'
 import { useNavigate } from 'react-router-dom'
+import Line from '../../components/Line'
 const SelectPenPal = () => {
 	const navigate = useNavigate()
 	const theme = useTheme()
@@ -103,7 +102,7 @@ const SelectPenPal = () => {
 									}}
 									key={1}
 									disablePadding
-									sx={{ p: 1, cursor: 'pointer' }}
+									sx={{ p: 1, cursor: 'pointer', height: '60px' }}
 								>
 									<ListItemAvatar>
 										<Avatar
@@ -179,11 +178,8 @@ const SelectPenPal = () => {
 										</Box>
 									</Box>
 								</ListItem>
-								<Divider
-									variant='inset'
-									component='li'
-									key={`${ind}-${labelId}`}
-								/>
+
+								<Line />
 							</Box>
 						)
 					})}

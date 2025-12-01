@@ -116,5 +116,14 @@ const ru = {
 	end_month: 'Месяц окончания',
 	end_year: 'Год окончания',
 	schedules: 'Графики',
+	select_department: 'Выберите отдел',
+	change_schedule: 'Менять график',
+	selected_employees: 'Выбранные сотрудники',
+	configure_weekly: 'Настроить по неделям',
+	configure_monthly: 'Настроить по месяцам',
+	configure_individually: 'Настроить индивидуально',
+	start_date: 'Дата начала',
+	end_date: 'Дата окончания',
+	
 }
 export default ru

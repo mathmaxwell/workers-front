@@ -1,5 +1,7 @@
 import { Box, useTheme } from '@mui/material'
 import SiteBar from '../../components/SiteBar'
+import SelectDepartament from './SelectDepartament'
+import EmployeesInDeportament from './EmployeesInDeportament'
 
 const Schedules = () => {
 	const theme = useTheme()
@@ -23,11 +25,14 @@ const Schedules = () => {
 					sx={{
 						width: 'calc(100vw - 310px)',
 						display: 'flex',
-						flexDirection: 'column',
+						alignItems: 'center',
+						justifyContent: 'center',
 						gap: '20px',
+						height: '100%',
 					}}
 				>
-					schedules
+					<SelectDepartament />
+					<EmployeesInDeportament />
 				</Box>
 			</Box>
 		</>

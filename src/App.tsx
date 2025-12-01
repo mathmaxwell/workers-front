@@ -16,6 +16,7 @@ import CreateWorkScheduleModal from './components/Modals/CreateWorkScheduleModal
 import ShowEmployees from './components/Modals/ShowEmployees'
 import ChangeStatus from './components/Modals/ChangeStatus'
 import Schedules from './pages/Schedules/Schedules'
+import UpdateSchedule from './components/Modals/UpdateSchedule'
 
 function App() {
 	const { theme } = useThemeStore()
@@ -32,12 +33,14 @@ function App() {
 					<Route path='/messages/:id' element={<Messages />} />
 					<Route path='/employees/:id' element={<EmployeesPage />} />
 					<Route path='/schedules' element={<Schedules />} />
+					<Route path='/schedules/:depId' element={<Schedules />} />
 					<Route path='/register' element={<Register />} />
 				</Routes>
 			</ThemeProvider>
 			<FilterModal />
 			<ChangeStatus />
 			<ShowEmployees />
+			<UpdateSchedule />
 			<ShowFieldsModal />
 			<CreateEmployeesModal />
 			<CreateWorkScheduleModal />

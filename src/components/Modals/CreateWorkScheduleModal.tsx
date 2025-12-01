@@ -19,7 +19,7 @@ const CreateWorkScheduleModal = () => {
 	const { schedule, closeModal, setSchedule } = useWorkScheduleModalStore()
 	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
-	const hours = Array.from({ length: 24 }, (_, i) => i)
+	const hours = Array.from({ length: 18 }, (_, i) => i + 6)
 	const [startWorkHour, setStartWorkHour] = useState<number>(9)
 	const [workHour, setWorkHour] = useState<number>(9)
 	const [isHoliday, setIsHoliday] = useState<boolean>(false)

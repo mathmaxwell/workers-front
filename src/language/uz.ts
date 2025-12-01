@@ -118,5 +118,13 @@ const uz = {
 	end_month: 'Tugash oyi',
 	end_year: 'Tugash yili',
 	schedules: 'Ish jadvali',
+	select_department: `Bo'limni tanlang`,
+	change_schedule: "Ish jadvalni o'zgartirish",
+	selected_employees: 'Tanlangan xodimlar',
+	configure_weekly: "Haftalar bo'yicha sozlash",
+	configure_monthly: "Oylar bo'yicha sozlash",
+	configure_individually: 'Individual tarzda sozlash',
+	start_date: 'Boshlanish sanasi',
+	end_date: 'Tugash sanasi',
 }
 export default uz

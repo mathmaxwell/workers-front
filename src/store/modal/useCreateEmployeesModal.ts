@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 import type { IEmployees } from '../../types/employees/employeesType'
-
 interface EmployeesModalState {
 	employee: IEmployees & { isOpen: boolean }
 	setEmployee: (data: Partial<IEmployees>) => void
@@ -8,7 +7,6 @@ interface EmployeesModalState {
 	openModal: () => void
 	closeModal: () => void
 }
-
 const initialEmployee: IEmployees & { isOpen: boolean } = {
 	isOpen: false,
 	mode: 'update',
@@ -38,17 +36,13 @@ const initialEmployee: IEmployees & { isOpen: boolean } = {
 
 export const useEmployeesModalStore = create<EmployeesModalState>(set => ({
 	employee: initialEmployee,
-
 	setEmployee: data =>
 		set(state => ({
 			employee: { ...state.employee, ...data },
 		})),
-
 	resetEmployee: () => set({ employee: initialEmployee }),
-
 	openModal: () =>
 		set(state => ({ employee: { ...state.employee, isOpen: true } })),
-
 	closeModal: () =>
 		set(state => ({ employee: { ...state.employee, isOpen: false } })),
 }))

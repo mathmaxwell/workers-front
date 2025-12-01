@@ -205,7 +205,6 @@ export async function getEmployees({
 			count,
 			sortField,
 			sortAsc,
-
 			gender: filter.gender,
 			passport_series_and_number: filter.passport_series_and_number,
 			PINFL: filter.PINFL,
