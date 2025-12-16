@@ -232,7 +232,7 @@ const ChangeStatus = () => {
 									if (canSave) {
 										await createStatus({
 											token,
-											id,
+											EmployeeId: id,
 											startDay: startDay!,
 											startMonth: startMonth!,
 											startYear: startYear!,
@@ -291,11 +291,11 @@ const ChangeStatus = () => {
 								/>
 								<ReadOnlyTexField
 									label={t.end_time}
-									textField={`${sts.startDay
+									textField={`${sts.endDay
 										.toString()
-										.padStart(2, '0')}.${sts.startMonth
+										.padStart(2, '0')}.${sts.endMonth
 										.toString()
-										.padStart(2, '0')}.${sts.startYear}`}
+										.padStart(2, '0')}.${sts.endYear}`}
 								/>
 							</Box>
 						)

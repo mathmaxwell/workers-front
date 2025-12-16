@@ -1,4 +1,4 @@
-import { Box, Typography, useTheme } from '@mui/material'
+import { Box, Button, Typography, useTheme } from '@mui/material'
 import full from '../assets/full.svg'
 import { useThemeStore } from '../theme/theme'
 import DarkModeIcon from '@mui/icons-material/DarkMode'
@@ -7,9 +7,13 @@ import UzbekSvg from '../assets/svg/Uzbak'
 import RussiaSvg from '../assets/svg/Russia'
 import { useTranslationStore } from '../language/useTranslationStore'
 import SiteBarButtons from './SiteBarButtons'
+import { useNavigate } from 'react-router-dom'
+import { useTokenStore } from '../store/token/useTokenStore'
 
 const SiteBar = () => {
-	const { lang, setLang } = useTranslationStore()
+	const { resetToken } = useTokenStore()
+	const navigate = useNavigate()
+	const { lang, setLang, t } = useTranslationStore()
 	const { theme: darkOrLigth, setTheme } = useThemeStore()
 	const theme = useTheme()
 	return (
@@ -100,6 +104,15 @@ const SiteBar = () => {
 			<SiteBarButtons name={'base'} />
 			<SiteBarButtons name={'messages'} />
 			<SiteBarButtons name={'schedules'} />
+			<Button
+				onClick={() => {
+					resetToken()
+					navigate('/register')
+				}}
+				variant='outlined'
+			>
+				{t.back}
+			</Button>
 		</Box>
 	)
 }

@@ -125,5 +125,13 @@ const ru = {
 	start_date: 'Дата начала',
 	end_date: 'Дата окончания',
 	select_again: 'Выбрать заново',
+	login: 'Авторизация',
+	or: 'или',
+	system_login: 'Вход в систему',
+	create_account: 'Создать аккаунт',
+	wait_for_admin_approval: 'Ждите, пока администратор не примет ваш запрос',
+	employee_not_accepted_yet: 'Сотрудник пока не принят',
+	accept: 'Принять',
+	reject: 'Отказать',
 }
 export default ru

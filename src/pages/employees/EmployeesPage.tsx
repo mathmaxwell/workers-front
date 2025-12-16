@@ -1,23 +1,29 @@
-import { Box, Button, ButtonGroup, useTheme } from '@mui/material'
+import { Box, Button, ButtonGroup, Typography, useTheme } from '@mui/material'
 import SiteBar from '../../components/SiteBar'
 import { useNavigate, useParams } from 'react-router-dom'
 import type { IEmployees } from '../../types/employees/employeesType'
 import { useQuery } from '@tanstack/react-query'
 import { useTokenStore } from '../../store/token/useTokenStore'
-import { getEmployeesById } from '../../api/employeesInfo/employeesInfo'
+import {
+	deleteEmployee,
+	getEmployeesById,
+	updateEmployees,
+} from '../../api/employeesInfo/employeesInfo'
 import Loading from '../../components/Loading/Loading'
 import { useTranslationStore } from '../../language/useTranslationStore'
-
+import DeleteIcon from '@mui/icons-material/Delete'
+import DoneIcon from '@mui/icons-material/Done'
 import ReadOnlyTexField from '../../components/textField/ReadOnlyTexField'
 import { useState } from 'react'
-
 import ShowWorkSchedule from '../../components/workSchedule/ShowWorkSchedule'
 import ShowTardinessHistory from '../../components/history/ShowTardinessHistory'
 import ShowCorrespondence from '../../components/correspondence/ShowCorrespondence'
 import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModal'
 import { useChangeStatus } from '../../store/modal/useChangeStatus'
+import { deleteUser } from '../../api/login/login'
 
 const EmployeesPage = () => {
+	const apiUrl = import.meta.env.VITE_API_URL
 	const { open, setId } = useChangeStatus()
 	const { setEmployee, openModal } = useEmployeesModalStore()
 	const [showElement, setShowElement] = useState<
@@ -51,9 +57,40 @@ const EmployeesPage = () => {
 		? t.on_sick_leave
 		: Employee?.on_a_business_trip
 		? t.on_a_business_trip
-		: Employee?.on_probation
-		? t.on_probation
 		: t.at_work
+
+	async function handleClick(mode: 'accept' | 'reject') {
+		if (!Employee) {
+			return
+		}
+		try {
+			if (mode == 'accept') {
+				await updateEmployees({
+					token,
+					id: Employee.id,
+					gender: Employee.gender,
+					passport_series_and_number: Employee.passport_series_and_number,
+					PINFL: Employee.PINFL,
+					full_name: Employee.full_name,
+					image: Employee.image,
+					department: Employee.department,
+					position: Employee.position,
+					date_of_birth: Employee.date_of_birth,
+					birth_month: Employee.birth_month,
+					year_of_birth: Employee.year_of_birth,
+					place_of_birth: Employee.place_of_birth,
+					nationality: Employee.nationality,
+					Email: Employee.Email,
+					phone_number: Employee.phone_number,
+					accepted: true,
+				})
+			} else {
+				await deleteEmployee({ token, id: Employee.id })
+				await deleteUser({ token, userId: Employee.id })
+				navigate('/base')
+			}
+		} catch (error) {}
+	}
 	return (
 		<>
 			<Box
@@ -99,12 +136,11 @@ const EmployeesPage = () => {
 							<img
 								src={
 									typeof Employee.image === 'string'
-										? Employee.image
+										? `${apiUrl}${Employee.image}`
 										: URL.createObjectURL(Employee.image)
 								}
 								alt='image'
 								style={{
-									backgroundColor: 'red',
 									width: '300px',
 									height: '100%',
 									borderRadius: '12px',
@@ -145,6 +181,47 @@ const EmployeesPage = () => {
 									label={t.gender}
 									textField={t[Employee.gender]}
 								/>
+								<Typography
+									sx={{
+										display: Employee.accepted ? 'none' : 'flex',
+										alignContent: 'center',
+										justifyContent: 'center',
+										width: '100%',
+									}}
+									variant='h6'
+								>
+									{t.employee_not_accepted_yet}
+								</Typography>
+								<Box
+									sx={{
+										display: Employee.accepted ? 'none' : 'flex',
+										alignItems: 'center',
+										justifyContent: 'center',
+										width: '100%',
+										gap: 2,
+									}}
+								>
+									<Button
+										color='info'
+										variant='contained'
+										onClick={() => {
+											handleClick('accept')
+										}}
+									>
+										<DoneIcon />
+										{t.accept}
+									</Button>
+									<Button
+										color='error'
+										variant='contained'
+										onClick={() => {
+											handleClick('reject')
+										}}
+									>
+										<DeleteIcon />
+										{t.reject}
+									</Button>
+								</Box>
 							</Box>
 						</Box>
 						<ButtonGroup variant='outlined'>

@@ -1,6 +1,11 @@
+export interface IUser {
+	id: string
+	login: string
+	password: string
+	token: string
+	userRole: number
+}
 export interface IEmployeesCount {
-	terminated: number
-	on_probation: number
 	active_employees: number
 	on_vacation: number
 	on_sick_leave: number
@@ -19,8 +24,6 @@ export interface IEmployees {
 	image: File | string
 	department: string
 	position: string
-	terminated: boolean
-	on_probation: boolean
 	on_vacation: boolean
 	on_sick_leave: boolean
 	on_a_business_trip: boolean
@@ -33,4 +36,5 @@ export interface IEmployees {
 	Email: string
 	phone_number: string
 	work_schedule: string
+	accepted: boolean
 }

@@ -1,5 +1,6 @@
 export interface IWorkScheduleForDay {
 	id: string
+	EmployeeId: string
 	startHour: number
 	startDay: number
 	startMonth: number

@@ -10,6 +10,7 @@ import {
 	TableRow,
 	useTheme,
 } from '@mui/material'
+
 import { useTranslationStore } from '../../language/useTranslationStore'
 import { useQuery } from '@tanstack/react-query'
 import type {
@@ -30,6 +31,8 @@ import { useNavigate } from 'react-router-dom'
 import Loading from '../Loading/Loading'
 import { useFilterModalStore } from '../../store/modal/useFilterModalStore'
 const EmployeesList = () => {
+	const apiUrl = import.meta.env.VITE_API_URL
+
 	const { token } = useTokenStore()
 	const { t } = useTranslationStore()
 	const theme = useTheme()
@@ -224,6 +227,7 @@ const EmployeesList = () => {
 						<TableBody>
 							{Employees?.map((emp, index) => (
 								<TableRow
+									sx={{ bgcolor: emp.accepted ? '' : 'red' }}
 									key={emp.id || index}
 									onClick={() => {
 										navigate(`/employees/${emp.id}`)
@@ -235,9 +239,14 @@ const EmployeesList = () => {
 											(col.key === 'image' ? (
 												<TableCell key={col.key}>
 													<img
+														style={{
+															width: '50px',
+															height: '50px',
+															objectFit: 'cover',
+														}}
 														src={
 															typeof emp.image === 'string'
-																? emp.image
+																? `${apiUrl}${emp.image}`
 																: URL.createObjectURL(emp.image)
 														}
 														alt='image'

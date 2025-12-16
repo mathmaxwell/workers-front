@@ -6,6 +6,7 @@ import { useQueries } from '@tanstack/react-query'
 import { useNavigate } from 'react-router-dom'
 
 const ShowEmployees = () => {
+	const apiUrl = import.meta.env.VITE_API_URL
 	const theme = useTheme()
 	const { token } = useTokenStore()
 	const navigate = useNavigate()
@@ -81,10 +82,10 @@ const ShowEmployees = () => {
 						>
 							{emp?.image && (
 								<img
-									style={{ width: '80px', height: '80px' }}
+									style={{ width: '80px', height: '80px', objectFit: 'cover' }}
 									src={
 										typeof emp.image === 'string'
-											? emp.image
+											? `${apiUrl}${emp.image}`
 											: URL.createObjectURL(emp.image)
 									}
 									alt='image'

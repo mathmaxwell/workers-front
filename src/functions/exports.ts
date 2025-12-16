@@ -11,6 +11,7 @@ export const dayIds = [
 export type DayId = (typeof dayIds)[number]
 
 export const createHoliday = (id: DayId): IWorkScheduleForDay => ({
+	EmployeeId: '',
 	id,
 	startHour: 99,
 	startDay: 1,
@@ -26,6 +27,7 @@ export const defaultSchedule: IWorkScheduleForDay[] = [
 	{
 		id: 'monday',
 		startHour: 9,
+		EmployeeId: '',
 		startDay: 1,
 		startMonth: 1,
 		startYear: 2025,
@@ -36,6 +38,7 @@ export const defaultSchedule: IWorkScheduleForDay[] = [
 	},
 	{
 		id: 'tuesday',
+		EmployeeId: '',
 		startHour: 9,
 		startDay: 1,
 		startMonth: 1,
@@ -48,6 +51,7 @@ export const defaultSchedule: IWorkScheduleForDay[] = [
 	{
 		id: 'wednesday',
 		startHour: 9,
+		EmployeeId: '',
 		startDay: 1,
 		startMonth: 1,
 		startYear: 2025,
@@ -64,6 +68,7 @@ export const defaultSchedule: IWorkScheduleForDay[] = [
 		startYear: 2025,
 		endHour: 18,
 		endDay: 1,
+		EmployeeId: '',
 		endMonth: 1,
 		endYear: 2025,
 	},
@@ -75,6 +80,7 @@ export const defaultSchedule: IWorkScheduleForDay[] = [
 		startYear: 2025,
 		endHour: 18,
 		endDay: 1,
+		EmployeeId: '',
 		endMonth: 1,
 		endYear: 2025,
 	},
@@ -88,6 +94,7 @@ export const defaultSchedule: IWorkScheduleForDay[] = [
 		endDay: 1,
 		endMonth: 1,
 		endYear: 2025,
+		EmployeeId: '',
 	},
 	createHoliday('sunday'),
 ]

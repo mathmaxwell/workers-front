@@ -39,7 +39,7 @@ export async function getMessageWithUser({
 	try {
 		const { data } = await api.post('/messages/getMessageWithUser', {
 			token,
-			id,
+			employeeId: id,
 		})
 		return data
 	} catch (error: any) {
@@ -56,7 +56,7 @@ export async function readedMessage({
 	try {
 		const { data } = await api.post('/messages/readedMessage', {
 			token,
-			id,
+			employeesId: id,
 		})
 		return data
 	} catch (error: any) {

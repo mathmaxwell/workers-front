@@ -5,7 +5,7 @@ import type {
 	IWorkSchedule,
 	IWorkScheduleForDay,
 } from '../../types/workSchedule/workSchedule'
-import { getEmployeeWorkScheduleForMonth } from '../../api/workSchedule/workSchedule'
+
 import {
 	Box,
 	Button,
@@ -25,6 +25,7 @@ import Loading from '../Loading/Loading'
 import { useWorkScheduleModalStore } from '../../store/modal/useWorkScheduleState'
 import type { IStatus } from '../../types/filterType'
 import { getStatusById } from '../../api/employeesInfo/employeesInfo'
+import { getEmployeeWorkSchedule } from '../../api/workSchedule/workSchedule'
 
 const ShowWorkSchedule = ({ id }: { id: string }) => {
 	const { t } = useTranslationStore()
@@ -36,7 +37,9 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 		schedule: modal,
 		openModal,
 	} = useWorkScheduleModalStore()
+
 	const selectedDays = modal.schedule
+
 	const [startMonthSchedule, setStartMonthSchedule] = useState<number>(
 		new Date().getMonth()
 	) //[0, 11]
@@ -60,11 +63,16 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 				navigate('/base')
 				throw new Error('No id provided')
 			}
-			const result = await getEmployeeWorkScheduleForMonth({
+			const endMonth = startMonthSchedule === 11 ? 0 : startMonthSchedule + 1
+			const endYear =
+				startMonthSchedule === 11 ? startYearSchedule + 1 : startYearSchedule
+			const result = await getEmployeeWorkSchedule({
 				token,
 				id,
 				startMonthSchedule: startMonthSchedule + 1,
 				startYearSchedule,
+				endMonthSchedule: endMonth,
+				endYearSchedule: endYear,
 			})
 			return result
 		},
@@ -163,9 +171,7 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 							const year = startYearSchedule
 							const month = startMonthSchedule //[0, 11]
 							const date = new Date(year, month, 1)
-
 							const daysInMonth = new Date(year, month + 1, 0).getDate()
-
 							const weeks: (number | null)[][] = []
 							let week: (number | null)[] = new Array(7).fill(null)
 							const jsDay = (date.getDay() + 6) % 7
@@ -233,7 +239,8 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 															item = work
 														} else {
 															item = {
-																id: id,
+																id: 'create',
+																EmployeeId: id,
 																startHour: 0,
 																startDay: day!,
 																startMonth: startMonthSchedule + 1,

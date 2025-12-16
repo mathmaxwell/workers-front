@@ -16,8 +16,6 @@ const initialEmployee: IEmployees & { isOpen: boolean } = {
 	gender: 'male',
 	department: '',
 	position: '',
-	terminated: false,
-	on_probation: false,
 	on_vacation: false,
 	on_sick_leave: false,
 	on_a_business_trip: false,
@@ -32,6 +30,7 @@ const initialEmployee: IEmployees & { isOpen: boolean } = {
 	work_schedule: '',
 	passport_series_and_number: '',
 	PINFL: '',
+	accepted: false,
 }
 
 export const useEmployeesModalStore = create<EmployeesModalState>(set => ({

@@ -127,5 +127,14 @@ const uz = {
 	start_date: 'Boshlanish sanasi',
 	end_date: 'Tugash sanasi',
 	select_again: 'Qayta tanlash',
+	login: 'Avtorizatsiya',
+	or: 'yoki',
+	system_login: 'Tizimga kirish',
+	create_account: "Ro'yxatdan o'tish",
+	wait_for_admin_approval:
+		"Administrator sizning so'rovingizni qabul qilguncha kuting",
+	employee_not_accepted_yet: 'Xodim hali qabul qilinmagan',
+	accept: 'Qabul qilish',
+	reject: 'Rad etish',
 }
 export default uz

@@ -191,9 +191,9 @@ export default function WeekSchedule({
 									s => 'id' in s && s.id === dayOfWeek
 								)
 								const isHoliday = template && 'holiday' in template
-
 								const workDay: IWorkScheduleForDay = {
-									id: employee.id,
+									id: 'create',
+									EmployeeId: employee.id,
 									startHour: isHoliday
 										? 99
 										: (template as any)?.startHour ?? 99,

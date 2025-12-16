@@ -14,6 +14,7 @@ export interface IFilterType {
 	work_schedule: string
 }
 export interface IStatus {
+	EmployeeId: string
 	status: 'on_vacation' | 'on_sick_leave' | 'on_a_business_trip'
 	startDay: number
 	startMonth: number

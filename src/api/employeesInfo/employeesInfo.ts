@@ -5,7 +5,6 @@ import type {
 import type { IFilterType, IStatus, SelectedType } from '../../types/filterType'
 import type { ITardinessHistory } from '../../types/workSchedule/workSchedule'
 import api from '../api'
-
 export async function createEmployees(payload: {
 	token: string
 	gender: 'male' | 'female'
@@ -58,6 +57,7 @@ export async function updateEmployees(payload: {
 	nationality: string
 	Email: string
 	phone_number: string
+	accepted: boolean
 }): Promise<IEmployees> {
 	const formData = new FormData()
 	Object.entries(payload).forEach(([key, value]) => {
@@ -98,16 +98,7 @@ export async function employeesCount({
 
 		return data
 	} catch (error) {
-		return {
-			terminated: 0,
-			on_probation: 0,
-			active_employees: 0,
-			on_vacation: 0,
-			on_sick_leave: 0,
-			on_a_business_trip: 0,
-			absence: 0,
-			total_employees: 0,
-		}
+		throw error
 	}
 }
 
@@ -266,7 +257,7 @@ export async function getEmployeesByStatus({
 			month,
 			year,
 		})
-		return data.ids
+		return data
 	} catch (error: any) {
 		throw new Error('Неизвестная ошибка')
 	}
@@ -290,7 +281,7 @@ export async function getStatusById({
 }
 export async function createStatus({
 	token,
-	id,
+	EmployeeId,
 	startDay,
 	startMonth,
 	startYear,
@@ -300,7 +291,7 @@ export async function createStatus({
 	status,
 }: {
 	token: string
-	id: string
+	EmployeeId: string
 	startDay: number
 	startMonth: number
 	startYear: number
@@ -312,7 +303,7 @@ export async function createStatus({
 	try {
 		const { data } = await api.post('/employees/createStatus', {
 			token,
-			id,
+			EmployeeId,
 			startDay,
 			startMonth,
 			startYear,
@@ -322,6 +313,23 @@ export async function createStatus({
 			status,
 		})
 		return data as IStatus
+	} catch (error: any) {
+		throw new Error('Неизвестная ошибка')
+	}
+}
+export async function deleteEmployee({
+	token,
+	id,
+}: {
+	token: string
+	id: string
+}): Promise<any> {
+	try {
+		const { data } = await api.post('/employees/deleteEmployee', {
+			token,
+			id,
+		})
+		return data
 	} catch (error: any) {
 		throw new Error('Неизвестная ошибка')
 	}

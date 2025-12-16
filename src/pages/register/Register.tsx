@@ -12,31 +12,52 @@ import { useTranslationStore } from '../../language/useTranslationStore'
 import { useState } from 'react'
 import RemoveRedEyeIcon from '@mui/icons-material/RemoveRedEye'
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
-import { login } from '../../api/login/login'
+import { login, register } from '../../api/login/login'
 import { useTokenStore } from '../../store/token/useTokenStore'
 import { useNavigate } from 'react-router-dom'
+import type { IUser } from '../../types/employees/employeesType'
+import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModal'
+import { getEmployeesById } from '../../api/employeesInfo/employeesInfo'
 
 const Register = () => {
+	const { openModal, setEmployee } = useEmployeesModalStore()
 	const navigate = useNavigate()
+	const [isLogin, setIsLogin] = useState(true)
 	const { setToken } = useTokenStore()
-	const [error, setError] = useState<boolean>(false)
 	const { t } = useTranslationStore()
 	const theme = useTheme()
 	const [isShow, setIsShow] = useState(false)
-	const [form, setForm] = useState({ login: '', password: '' })
+	const [form, setForm] = useState<{ login: string; password: string }>({
+		login: '',
+		password: '',
+	})
+
 	async function handleSubmit(form: { login: string; password: string }) {
 		try {
-			const result = await login(form)
-			if (result.error) {
-				alert(result.error)
-				setError(true)
-			} else {
-				setError(false)
+			if (isLogin) {
+				const result = (await login(form)) as IUser
 				setToken(result.token)
-				navigate('/dashboard')
+				if (result.userRole == 1) {
+					navigate('/dashboard')
+					return
+				}
+				const isCorrect = await getEmployeesById({
+					token: result.token,
+					id: result.token,
+				})
+				if (isCorrect.accepted) {
+					navigate('/dashboard')
+				} else {
+					alert(t.wait_for_admin_approval)
+				}
+			} else {
+				const result = (await register(form)) as IUser
+				openModal()
+				setEmployee({ mode: 'create' })
+				setToken(result.token)
 			}
-		} catch (error) {
-			setError(true)
+		} catch (error: any) {
+			alert(error?.response?.data || error.message || 'Unknown error')
 		}
 	}
 	return (
@@ -54,13 +75,14 @@ const Register = () => {
 			<img
 				src={face}
 				alt='logo'
+				loading='lazy'
 				style={{
 					position: 'fixed',
 					top: 0,
 					left: 0,
 					height: '100%',
 					objectFit: 'cover',
-					zIndex: 1,
+					zIndex: 0,
 					opacity: 0.2,
 				}}
 			/>
@@ -89,18 +111,18 @@ const Register = () => {
 					fullWidth
 					variant='outlined'
 					placeholder='Login'
-					error={error}
+					onKeyDown={e => e.key === 'Enter' && handleSubmit(form)}
 					value={form.login}
 					onChange={e => setForm({ ...form, login: e.target.value })}
 				/>
 
 				<TextField
 					fullWidth
-					error={error}
 					variant='outlined'
 					placeholder='Password'
 					type={isShow ? 'text' : 'password'}
 					value={form.password}
+					onKeyDown={e => e.key === 'Enter' && handleSubmit(form)}
 					onChange={e => setForm({ ...form, password: e.target.value })}
 					InputProps={{
 						endAdornment: (
@@ -116,12 +138,36 @@ const Register = () => {
 				<Button
 					variant='contained'
 					size='large'
-					sx={{ mt: 1, borderRadius: 2, color: theme.palette.secondary.main }}
-					onClick={() => {
-						handleSubmit(form)
+					disabled={!form.login || !form.password}
+					onClick={() => handleSubmit(form)}
+					color='info'
+				>
+					{isLogin ? t.system_login : t.create_account}
+				</Button>
+				<Box
+					sx={{
+						display: 'flex',
+						alignItems: 'center',
+						justifyContent: 'center',
+						width: '100%',
+						gap: 5,
 					}}
 				>
-					{t.enter}
+					<Box
+						sx={{ width: '100%', height: '2px', border: '1px solid black' }}
+					/>
+					<Typography>{t.or}</Typography>
+					<Box
+						sx={{ width: '100%', height: '2px', border: '1px solid black' }}
+					/>
+				</Box>
+				<Button
+					onClick={() => {
+						setIsLogin(prev => !prev)
+					}}
+					variant='outlined'
+				>
+					{isLogin ? t.register : t.login}
 				</Button>
 			</Box>
 		</Box>

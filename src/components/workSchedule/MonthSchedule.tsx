@@ -23,6 +23,7 @@ const MonthSchedule = ({
 		{ length: 31 },
 		(_, i) => ({
 			id: (i + 1).toString(),
+			EmployeeId: '',
 			startHour: 99,
 			endHour: 99,
 			startDay: i + 1,
@@ -41,7 +42,6 @@ const MonthSchedule = ({
 		setSchedule(prev =>
 			prev.map(day => {
 				if (!selectedDays.includes(day.id)) return day
-
 				return {
 					...day,
 					startHour: newStartHour,
@@ -58,12 +58,10 @@ const MonthSchedule = ({
 		setSchedule(prev =>
 			prev.map(day => {
 				if (!selectedDays.includes(day.id)) return day
-
 				// Если выходной (99), не меняем
 				if (day.startHour === 99) {
 					return { ...day }
 				}
-
 				return {
 					...day,
 					endHour: day.startHour + workHours,
@@ -83,7 +81,8 @@ const MonthSchedule = ({
 				const template = schedule.find(d => Number(d.id) === date)
 				if (template) {
 					const workDay: IWorkScheduleForDay = {
-						id: employee.id,
+						id: template.id,
+						EmployeeId: employee.id,
 						startHour: template.startHour,
 						endHour: template.endHour,
 						startDay: date,

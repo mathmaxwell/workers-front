@@ -10,6 +10,7 @@ import {
 	MenuItem,
 	Stack,
 	useTheme,
+	Autocomplete,
 } from '@mui/material'
 import PhotoCamera from '@mui/icons-material/PhotoCamera'
 import { useTranslationStore } from '../../language/useTranslationStore'
@@ -21,10 +22,17 @@ import {
 	updateEmployees,
 } from '../../api/employeesInfo/employeesInfo'
 import { useTokenStore } from '../../store/token/useTokenStore'
+import {
+	createDepartment,
+	getDepartment,
+} from '../../api/deportament/deportament'
+import type { IDepartment } from '../../types/department/departmentType'
+import { useQuery } from '@tanstack/react-query'
 const days = Array.from({ length: 31 }, (_, i) => i + 1)
 const currentYear = new Date().getFullYear()
 const years = Array.from({ length: 70 }, (_, i) => currentYear - i)
 export const CreateEmployeesModal = () => {
+	const apiUrl = import.meta.env.VITE_API_URL
 	const { token } = useTokenStore()
 	const theme = useTheme()
 	const { t } = useTranslationStore()
@@ -72,6 +80,7 @@ export const CreateEmployeesModal = () => {
 					nationality: employee.nationality,
 					Email: employee.Email,
 					phone_number: employee.phone_number,
+					accepted: employee.accepted,
 				})
 			}
 			closeModal()
@@ -83,6 +92,26 @@ export const CreateEmployeesModal = () => {
 		if (file) {
 			handleChange('image', file)
 		}
+	}
+	const { data: deportaments } = useQuery<IDepartment[]>({
+		queryKey: ['deportaments'],
+		queryFn: async () => {
+			const result = await getDepartment({
+				token,
+			})
+			return result || []
+		},
+	})
+	async function handlerAddDep(newDepName: string) {
+		const exists = deportaments?.some(dep => dep.name === newDepName)
+		if (exists) {
+			return
+		}
+
+		try {
+			const result = await createDepartment({ token, name: newDepName })
+			console.log('result', result)
+		} catch (error) {}
 	}
 
 	return (
@@ -109,7 +138,6 @@ export const CreateEmployeesModal = () => {
 				>
 					{employee.mode == 'update' ? t.edit : t.add_employees}
 				</Typography>
-
 				<Stack spacing={2}>
 					<Box
 						sx={{
@@ -181,7 +209,7 @@ export const CreateEmployeesModal = () => {
 								<img
 									src={
 										typeof employee.image === 'string'
-											? employee.image
+											? `${apiUrl}${employee.image}`
 											: URL.createObjectURL(employee.image)
 									}
 									alt='image'
@@ -208,7 +236,6 @@ export const CreateEmployeesModal = () => {
 							</Button>
 						</Box>
 					</Box>
-
 					{/* Date of birth */}
 					<Stack direction='row' spacing={1}>
 						{/* День */}
@@ -356,13 +383,22 @@ export const CreateEmployeesModal = () => {
 						}}
 					>
 						{/* Department */}
-						<TextField
-							label={t.department}
-							fullWidth
-							value={employee.department}
-							onChange={e => handleChange('department', e.target.value)}
-						/>
 
+						<Autocomplete
+							sx={{ width: '100%' }}
+							freeSolo
+							options={deportaments ? deportaments!.map(d => d.name) : ['']}
+							value={employee.department}
+							onChange={(_, newValue) => {
+								handleChange('department', newValue || '')
+							}}
+							onInputChange={(_, newInputValue) => {
+								handleChange('department', newInputValue)
+							}}
+							renderInput={params => (
+								<TextField {...params} label={t.department} fullWidth />
+							)}
+						/>
 						{/* Position */}
 						<TextField
 							label={t.position}
@@ -371,7 +407,6 @@ export const CreateEmployeesModal = () => {
 							onChange={e => handleChange('position', e.target.value)}
 						/>
 					</Box>
-
 					<Stack direction='row' spacing={2} mt={2} justifyContent='flex-end'>
 						<Button
 							variant='outlined'
@@ -380,7 +415,13 @@ export const CreateEmployeesModal = () => {
 						>
 							{t.reset}
 						</Button>
-						<Button variant='contained' onClick={handleApply}>
+						<Button
+							variant='contained'
+							onClick={() => {
+								handleApply()
+								handlerAddDep(employee.department)
+							}}
+						>
 							{t.save}
 						</Button>
 					</Stack>
