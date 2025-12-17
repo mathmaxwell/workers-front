@@ -206,9 +206,13 @@ export async function getEmployees({
 			full_name: filter.full_name,
 			department: filter.department,
 			position: filter.position,
-			date_of_birth: filter.date_of_birth,
-			birth_month: filter.birth_month,
-			year_of_birth: filter.year_of_birth,
+			date_of_birth: String(
+				filter.date_of_birth < 1 ? '' : filter.date_of_birth
+			),
+			birth_month: String(filter.birth_month < 1 ? '' : filter.birth_month),
+			year_of_birth: String(
+				filter.year_of_birth < 1 ? '' : filter.year_of_birth
+			),
 			place_of_birth: filter.place_of_birth,
 			nationality: filter.nationality,
 		})

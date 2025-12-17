@@ -5,7 +5,6 @@ import SiteBar from '../../components/SiteBar'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTokenStore } from '../../store/token/useTokenStore'
-
 const BasePage = () => {
 	const theme = useTheme()
 	const navigate = useNavigate()
