@@ -28,6 +28,7 @@ import {
 } from '../../api/deportament/deportament'
 import type { IDepartment } from '../../types/department/departmentType'
 import { useQuery } from '@tanstack/react-query'
+import { createUser, register } from '../../api/login/login'
 const days = Array.from({ length: 31 }, (_, i) => i + 1)
 const currentYear = new Date().getFullYear()
 const years = Array.from({ length: 70 }, (_, i) => currentYear - i)
@@ -45,7 +46,7 @@ export const CreateEmployeesModal = () => {
 	async function handleApply() {
 		try {
 			if (employee.mode == 'create') {
-				await createEmployees({
+				const result = await createEmployees({
 					token,
 					gender: employee.gender,
 					passport_series_and_number: employee.passport_series_and_number,
@@ -62,6 +63,13 @@ export const CreateEmployeesModal = () => {
 					Email: employee.Email,
 					phone_number: employee.phone_number,
 				})
+				await createUser({
+					login: employee.passport_series_and_number,
+					password: employee.passport_series_and_number,
+					userId: result.id,
+				})
+				alert(`login - ${employee.passport_series_and_number}
+					password - ${employee.passport_series_and_number}`)
 			} else {
 				await updateEmployees({
 					token,
@@ -107,10 +115,8 @@ export const CreateEmployeesModal = () => {
 		if (exists) {
 			return
 		}
-
 		try {
-			const result = await createDepartment({ token, name: newDepName })
-			console.log('result', result)
+			await createDepartment({ token, name: newDepName })
 		} catch (error) {}
 	}
 

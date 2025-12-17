@@ -11,7 +11,7 @@ import { useNavigate } from 'react-router-dom'
 import { useTokenStore } from '../store/token/useTokenStore'
 
 const SiteBar = () => {
-	const { resetToken } = useTokenStore()
+	const { resetToken, userRole } = useTokenStore()
 	const navigate = useNavigate()
 	const { lang, setLang, t } = useTranslationStore()
 	const { theme: darkOrLigth, setTheme } = useThemeStore()
@@ -100,10 +100,11 @@ const SiteBar = () => {
 			>
 				FaceIDS
 			</Typography>
-			<SiteBarButtons name={'dashboard'} />
-			<SiteBarButtons name={'base'} />
+			{userRole !== '99' && <SiteBarButtons name={'dashboard'} />}
+			{userRole !== '99' && <SiteBarButtons name={'base'} />}
 			<SiteBarButtons name={'messages'} />
 			<SiteBarButtons name={'schedules'} />
+			{userRole == '1' && <SiteBarButtons name={'admin_page'} />}
 			<Button
 				onClick={() => {
 					resetToken()

@@ -18,12 +18,11 @@ import { useNavigate } from 'react-router-dom'
 import type { IUser } from '../../types/employees/employeesType'
 import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModal'
 import { getEmployeesById } from '../../api/employeesInfo/employeesInfo'
-
 const Register = () => {
 	const { openModal, setEmployee } = useEmployeesModalStore()
 	const navigate = useNavigate()
 	const [isLogin, setIsLogin] = useState(true)
-	const { setToken } = useTokenStore()
+	const { setToken, setUserRole } = useTokenStore()
 	const { t } = useTranslationStore()
 	const theme = useTheme()
 	const [isShow, setIsShow] = useState(false)
@@ -37,6 +36,7 @@ const Register = () => {
 			if (isLogin) {
 				const result = (await login(form)) as IUser
 				setToken(result.token)
+				setUserRole(result.userRole.toString())
 				if (result.userRole == 1) {
 					navigate('/dashboard')
 					return
@@ -55,6 +55,7 @@ const Register = () => {
 				openModal()
 				setEmployee({ mode: 'create' })
 				setToken(result.token)
+				setUserRole(result.userRole.toString())
 			}
 		} catch (error: any) {
 			alert(error?.response?.data || error.message || 'Unknown error')

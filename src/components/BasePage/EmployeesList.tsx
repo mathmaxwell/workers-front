@@ -32,7 +32,6 @@ import Loading from '../Loading/Loading'
 import { useFilterModalStore } from '../../store/modal/useFilterModalStore'
 const EmployeesList = () => {
 	const apiUrl = import.meta.env.VITE_API_URL
-
 	const { token } = useTokenStore()
 	const { t } = useTranslationStore()
 	const theme = useTheme()
@@ -45,7 +44,6 @@ const EmployeesList = () => {
 	) => {
 		setPage(newPage)
 	}
-
 	const handleChangeRowsPerPage = (
 		event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
 	) => {

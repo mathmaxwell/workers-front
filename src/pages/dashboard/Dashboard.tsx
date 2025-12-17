@@ -8,10 +8,13 @@ import { useEffect } from 'react'
 const Dashboard = () => {
 	const navigate = useNavigate()
 	const theme = useTheme()
-	const { token } = useTokenStore()
+	const { token, userRole } = useTokenStore()
 	useEffect(() => {
 		if (!token) {
 			navigate('/register')
+		}
+		if (userRole == '99') {
+			navigate(`/employees/${token}`)
 		}
 	}, [token])
 	return (

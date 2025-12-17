@@ -12,7 +12,7 @@ import EditCalendarIcon from '@mui/icons-material/EditCalendar'
 const SiteBarButtons = ({
 	name,
 }: {
-	name: 'dashboard' | 'base' | 'messages' | 'schedules'
+	name: 'dashboard' | 'base' | 'messages' | 'schedules' | 'admin_page'
 }) => {
 	const { t } = useTranslationStore()
 	const { pathname } = useLocation()

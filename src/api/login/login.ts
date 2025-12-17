@@ -15,6 +15,27 @@ export async function login({
 		throw error
 	}
 }
+
+export async function createUser({
+	login,
+	password,
+	userId,
+}: {
+	login: string
+	password: string
+	userId: string
+}) {
+	try {
+		const result = await api.post('/users/createUser', {
+			login,
+			password,
+			userId,
+		})
+		return result.data as IUser
+	} catch (error) {
+		throw error
+	}
+}
 export async function register({
 	login,
 	password,

@@ -136,5 +136,8 @@ const uz = {
 	employee_not_accepted_yet: 'Xodim hali qabul qilinmagan',
 	accept: 'Qabul qilish',
 	reject: 'Rad etish',
+	admin_page: 'Admin paneli',
+	delete: "O'chirish",
+	select_time: 'Vaqtni tanlang',
 }
 export default uz

@@ -133,5 +133,8 @@ const ru = {
 	employee_not_accepted_yet: 'Сотрудник пока не принят',
 	accept: 'Принять',
 	reject: 'Отказать',
+	admin_page: 'Панель администратора',
+	delete: 'Удалить',
+	select_time: 'Выберите время',
 }
 export default ru

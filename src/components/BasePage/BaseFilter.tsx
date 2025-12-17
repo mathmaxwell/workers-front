@@ -18,7 +18,6 @@ import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModa
 
 const BaseFilter = () => {
 	const { setFilter, filter } = useFilterModalStore()
-
 	const { t } = useTranslationStore()
 	const theme = useTheme()
 	const { openModal, setEmployee } = useEmployeesModalStore()
@@ -59,7 +58,6 @@ const BaseFilter = () => {
 						sx={{
 							display: 'flex',
 							alignItems: 'center',
-
 							width: 350,
 							border: '1px solid',
 							borderColor: theme.palette.primary.main,

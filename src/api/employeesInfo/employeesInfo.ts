@@ -60,13 +60,20 @@ export async function updateEmployees(payload: {
 	accepted: boolean
 }): Promise<IEmployees> {
 	const formData = new FormData()
+
 	Object.entries(payload).forEach(([key, value]) => {
 		if (key === 'image' && value instanceof File) {
 			formData.append('image', value)
-		} else {
-			formData.append(key, String(value))
+			return
 		}
+
+		if (key === 'accepted') return
+
+		formData.append(key, String(value))
 	})
+
+	// ⬅️ ЯВНО добавляем accepted
+	formData.append('accepted', payload.accepted ? 'true' : 'false')
 
 	const { data } = await api.post('/employees/updateEmployees', formData, {
 		headers: {
@@ -76,7 +83,6 @@ export async function updateEmployees(payload: {
 
 	return data
 }
-
 export async function employeesCount({
 	token,
 	day,
@@ -101,7 +107,6 @@ export async function employeesCount({
 		throw error
 	}
 }
-
 export async function getLateEmployeesById({
 	token,
 	id,
@@ -173,7 +178,6 @@ export async function getLateEmployees({
 		}
 	}
 }
-
 export async function getEmployees({
 	token,
 	page,
