@@ -1,3 +1,4 @@
+import { clearingDate } from '../../functions/late'
 import type {
 	IEmployees,
 	IEmployeesCount,
@@ -125,11 +126,43 @@ export async function getLateEmployeesById({
 	try {
 		const { data } = await api.post('/employees/getLateEmployeesById', {
 			token,
-			id,
+			employeeId: id,
+			startDay: 1,
 			startMonth,
 			startYear,
+			endDay: 31,
 			endMonth,
 			endYear,
+		})
+		return data as ITardinessHistory[]
+	} catch (error: any) {
+		if (error.response) {
+			throw new Error(error.response.data?.message || 'Ошибка запроса')
+		} else if (error.request) {
+			throw new Error('Сервер не отвечает')
+		} else {
+			throw new Error('Неизвестная ошибка')
+		}
+	}
+}
+export async function getLateEmployeesByIdForToday({
+	token,
+	id,
+}: {
+	token: string
+	id: string
+}): Promise<ITardinessHistory[]> {
+	try {
+		const now = new Date()
+		const { data } = await api.post('/employees/getLateEmployeesById', {
+			token,
+			employeeId: id,
+			startDay: now.getDay(),
+			startMonth: now.getMonth() + 1,
+			startYear: now.getFullYear(),
+			endDay: now.getDay(),
+			endMonth: now.getMonth() + 1,
+			endYear: now.getFullYear(),
 		})
 		return data as ITardinessHistory[]
 	} catch (error: any) {
@@ -152,12 +185,27 @@ export async function getLateEmployees({
 	endDate: Date
 }): Promise<ITardinessHistory[]> {
 	try {
+		const now = new Date()
+		const nowDay = now.getDate()
+		const nowMonth = now.getMonth() + 1
+		const nowYear = now.getFullYear()
+		const nowNumber = nowDay + nowMonth * 100 + nowYear * 10000
 		const start_day = startDate.getDate()
 		const start_month = startDate.getMonth() + 1
 		const start_year = startDate.getFullYear()
-		const end_day = endDate.getDate()
-		const end_month = endDate.getMonth() + 1
-		const end_year = endDate.getFullYear()
+		const startNumber = start_day + start_month * 100 + start_year * 10000
+		if (startNumber > nowNumber) {
+			return []
+		}
+		let end_day = endDate.getDate()
+		let end_month = endDate.getMonth() + 1
+		let end_year = endDate.getFullYear()
+		const endNumber = end_day + end_month * 100 + end_year * 10000
+		if (endNumber > nowNumber) {
+			end_day = nowDay
+			end_month = nowMonth
+			end_year = nowYear
+		}
 		const { data } = await api.post('/employees/getLateEmployees', {
 			token,
 			start_day,
@@ -167,7 +215,8 @@ export async function getLateEmployees({
 			end_month,
 			end_year,
 		})
-		return data as ITardinessHistory[]
+		data as ITardinessHistory[]
+		return clearingDate(data)
 	} catch (error: any) {
 		if (error.response) {
 			throw new Error(error.response.data?.message || 'Ошибка запроса')

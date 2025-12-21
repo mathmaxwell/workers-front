@@ -42,7 +42,6 @@ export const getPrevMonthRange = (date: Date) => {
 	const prevMonth = new Date(date.getFullYear(), date.getMonth() - 1, 1)
 	return getMonthRange(prevMonth)
 }
-
 export const getNextMonthRange = (date: Date) => {
 	const nextMonth = new Date(date.getFullYear(), date.getMonth() + 1, 1)
 	return getMonthRange(nextMonth)
@@ -61,7 +60,6 @@ export const getWeekRange = (date: Date) => {
 
 	return { start, end }
 }
-
 export const getPrevWeekRange = (date: Date) => {
 	const prevWeek = new Date(date)
 	prevWeek.setDate(date.getDate() - 7)
@@ -72,7 +70,6 @@ export const getNextWeekRange = (date: Date) => {
 	nextWeek.setDate(date.getDate() + 7)
 	return getWeekRange(nextWeek)
 }
-
 export const getLateStatsArray = (
 	employees: ITardinessHistory[] = [],
 	startDate: Date,
@@ -80,10 +77,11 @@ export const getLateStatsArray = (
 ) => {
 	const allDays = eachDayOfInterval({ start: startDate, end: endDate })
 	const stats = allDays.map(day => {
-		const count = employees.filter(e => isSameDay(new Date(e.date), day)).length
+		const count = employees.filter(e =>
+			isSameDay(new Date(`${e.year}, ${e.month}, ${e.day}`), day)
+		).length
 		return count
 	})
-
 	return stats
 }
 export function getLostTime(late: ITardinessHistory): {

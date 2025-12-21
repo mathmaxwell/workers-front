@@ -31,19 +31,15 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 	const { t } = useTranslationStore()
 	const { token } = useTokenStore()
 	const navigate = useNavigate()
-
 	const {
 		setSchedule,
 		schedule: modal,
 		openModal,
 	} = useWorkScheduleModalStore()
-
 	const selectedDays = modal.schedule
-
 	const [startMonthSchedule, setStartMonthSchedule] = useState<number>(
 		new Date().getMonth()
-	) //[0, 11]
-
+	)
 	const [startYearSchedule, setStartYearSchedule] = useState<number>(
 		new Date().getFullYear()
 	)
@@ -104,6 +100,7 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 					alignItems: 'center',
 					justifyContent: 'space-between',
 					width: '100%',
+					px: 1,
 				}}
 			>
 				<Box
@@ -242,11 +239,11 @@ const ShowWorkSchedule = ({ id }: { id: string }) => {
 																id: 'create',
 																EmployeeId: id,
 																startHour: 0,
-																startDay: day!,
+																startDay: day,
 																startMonth: startMonthSchedule + 1,
 																startYear: startYearSchedule,
 																endHour: 0,
-																endDay: day!,
+																endDay: day,
 																endMonth: startMonthSchedule + 1,
 																endYear: startYearSchedule,
 															}

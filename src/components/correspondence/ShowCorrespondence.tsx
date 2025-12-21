@@ -49,6 +49,7 @@ const ShowCorrespondence = ({ id }: { id: string }) => {
 					borderRadius: 2,
 					border: '1px solid',
 					borderColor: theme.palette.primary.main,
+					px: 1,
 				}}
 			>
 				{id === undefined ? (

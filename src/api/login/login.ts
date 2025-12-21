@@ -64,3 +64,27 @@ export async function deleteUser({
 		throw error
 	}
 }
+
+export async function updateUser({
+	login,
+	password,
+	userId,
+	userRole,
+}: {
+	login: string
+	password: string
+	userId: string
+	userRole: number
+}) {
+	try {
+		const result = await api.post('/users/updateUser', {
+			login,
+			password,
+			userId,
+			userRole,
+		})
+		return result.data as IUser
+	} catch (error) {
+		throw error
+	}
+}

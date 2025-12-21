@@ -5,31 +5,6 @@ import type {
 } from '../../types/workSchedule/workSchedule'
 import api from '../api'
 
-export async function createWorkSchedule({
-	token,
-	workSchedule,
-}: {
-	token: string
-	workSchedule: IWorkScheduleForDay
-}): Promise<ITardinessHistory[]> {
-	try {
-		const { data } = await api.post('/workSchedule/createWorkSchedule', {
-			token,
-			EmployeeId: workSchedule.EmployeeId,
-			startHour: workSchedule.startHour,
-			startDay: workSchedule.startDay,
-			startMonth: workSchedule.startMonth,
-			startYear: workSchedule.startYear,
-			endHour: workSchedule.endHour,
-			endDay: workSchedule.endDay,
-			endMonth: workSchedule.endMonth,
-			endYear: workSchedule.endYear,
-		})
-		return data
-	} catch (error: any) {
-		return []
-	}
-}
 export async function updateWorkSchedule({
 	token,
 	workSchedule,
@@ -65,7 +40,6 @@ export async function updateWorkSchedule({
 						endMonth: workSchedule.endMonth,
 						endYear: workSchedule.endYear,
 				  })
-
 		return data
 	} catch (error: any) {
 		return []

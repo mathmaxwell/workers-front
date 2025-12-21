@@ -6,6 +6,7 @@ import {
 	IconButton,
 	ButtonGroup,
 	Button,
+	TextField,
 } from '@mui/material'
 import SiteBar from '../../components/SiteBar'
 import { useTokenStore } from '../../store/token/useTokenStore'
@@ -37,6 +38,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo'
 import dayjs, { Dayjs } from 'dayjs'
+import { createRecord } from '../../api/records/records'
 const Admin = () => {
 	const { t } = useTranslationStore()
 	const theme = useTheme()
@@ -98,13 +100,7 @@ const Admin = () => {
 		{ field: 'accepted', headerName: t.accept, width: 110 },
 	]
 	const [selectedEmployees, setSelectedEmployees] = useState<IEmployees[]>([])
-
 	const [date, setDate] = useState<Dayjs | null>(dayjs())
-	// console.log('year', date?.year())
-	// console.log('month', date?.month()) // +1
-	// console.log('date', date?.date())
-	// console.log('hour', date?.hour())
-	// console.log('minute', date?.minute())
 	async function handleDelete() {
 		try {
 			for (const employee of selectedEmployees) {
@@ -115,6 +111,40 @@ const Admin = () => {
 			}
 		} catch (error) {
 			console.error(error)
+		}
+	}
+	const [image, setImage] = useState<File>()
+	const handlePhotoChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+		const file = event.target.files?.[0]
+		if (file) {
+			setImage(file)
+		}
+	}
+
+	const [description, setDescription] = useState<string>('')
+	async function handleCreateRecord() {
+		if (!date || !image) {
+			alert('error data')
+			return
+		}
+		try {
+			for (const employee of selectedEmployees) {
+				await createRecord({
+					employeeId: employee.id,
+					image: image,
+					year: date?.year(),
+					month: date?.month() + 1,
+					day: date?.date(),
+					hour: date?.hour(),
+					minute: date?.minute(),
+					second: date?.second(),
+					description: description,
+				})
+			}
+			alert('success')
+		} catch (error) {
+			console.error(error)
+			alert(error)
 		}
 	}
 
@@ -191,6 +221,30 @@ const Admin = () => {
 							/>
 						</DemoContainer>
 					</LocalizationProvider>
+
+					<TextField
+						placeholder={t.description}
+						value={description}
+						onChange={e => {
+							setDescription(e.target.value)
+						}}
+					/>
+					<Button variant='outlined' component='label'>
+						{t.upload_photo}
+						<input
+							type='file'
+							hidden
+							accept='image/*'
+							onChange={handlePhotoChange}
+						/>
+					</Button>
+					<Button
+						onClick={() => {
+							handleCreateRecord()
+						}}
+					>
+						{t.create_record}
+					</Button>
 				</Box>
 				<Box
 					sx={{

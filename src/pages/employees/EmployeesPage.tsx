@@ -21,9 +21,11 @@ import ShowCorrespondence from '../../components/correspondence/ShowCorresponden
 import { useEmployeesModalStore } from '../../store/modal/useCreateEmployeesModal'
 import { useChangeStatus } from '../../store/modal/useChangeStatus'
 import { deleteUser } from '../../api/login/login'
+import { useChangePassword } from '../../store/modal/useChangePassword'
 
 const EmployeesPage = () => {
 	const apiUrl = import.meta.env.VITE_API_URL
+	const { open: passOpen, setId: passId } = useChangePassword()
 	const { open, setId } = useChangeStatus()
 	const { setEmployee, openModal } = useEmployeesModalStore()
 	const [showElement, setShowElement] = useState<
@@ -119,7 +121,6 @@ const EmployeesPage = () => {
 							borderRadius: 2,
 							border: '1px solid',
 							borderColor: theme.palette.primary.main,
-							p: 1,
 						}}
 					>
 						{/* image */}
@@ -131,6 +132,7 @@ const EmployeesPage = () => {
 								alignContent: 'center',
 								justifyContent: 'space-between',
 								gap: 1,
+								p: 1,
 							}}
 						>
 							<img
@@ -224,7 +226,7 @@ const EmployeesPage = () => {
 								</Box>
 							</Box>
 						</Box>
-						<ButtonGroup variant='outlined'>
+						<ButtonGroup variant='outlined' sx={{ px: 1 }}>
 							<Button
 								variant={
 									showElement === 'full_information' ? 'contained' : 'outlined'
@@ -287,6 +289,7 @@ const EmployeesPage = () => {
 										display: 'grid',
 										gridTemplateColumns: 'repeat(2, 1fr)',
 										gap: 2,
+										p: 1,
 									}}
 								>
 									<ReadOnlyTexField
@@ -349,6 +352,15 @@ const EmployeesPage = () => {
 										}}
 									>
 										{t.change_status}
+									</Button>
+									<Button
+										onClick={() => {
+											passOpen()
+											passId(Employee.id)
+										}}
+										variant='outlined'
+									>
+										{t.change_password}
 									</Button>
 								</Box>
 							) : showElement === 'correspondence' ? (

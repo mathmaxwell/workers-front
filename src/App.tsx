@@ -18,6 +18,7 @@ import ChangeStatus from './components/Modals/ChangeStatus'
 import Schedules from './pages/Schedules/Schedules'
 import UpdateSchedule from './components/Modals/UpdateSchedule'
 import Admin from './pages/admin/Admin'
+import ChangePassword from './components/Modals/ChangePassword'
 
 function App() {
 	const { theme } = useThemeStore()
@@ -43,6 +44,7 @@ function App() {
 			<ChangeStatus />
 			<ShowEmployees />
 			<UpdateSchedule />
+			<ChangePassword />
 			<ShowFieldsModal />
 			<CreateEmployeesModal />
 			<CreateWorkScheduleModal />

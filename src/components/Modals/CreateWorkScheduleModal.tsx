@@ -35,22 +35,27 @@ const CreateWorkScheduleModal = () => {
 				})),
 			})
 		} else {
-			const { endYear, endMonth, endDay, endHour } = calculateEndDateTime(
-				first.startYear,
-				first.startMonth,
-				first.startDay,
-				startWorkHour,
-				workHour
-			)
 			setSchedule({
-				schedule: schedule.schedule.map(item => ({
-					...item,
-					startHour: startWorkHour,
-					endHour,
-					endDay,
-					endMonth,
-					endYear,
-				})),
+				schedule: schedule.schedule.map(item => {
+					if (isHoliday) {
+						return { ...item, startHour: 99, endHour: 99 }
+					}
+					const { endYear, endMonth, endDay, endHour } = calculateEndDateTime(
+						item.startYear,
+						item.startMonth,
+						item.startDay,
+						startWorkHour,
+						workHour
+					)
+					return {
+						...item,
+						startHour: startWorkHour,
+						endHour,
+						endDay,
+						endMonth,
+						endYear,
+					}
+				}),
 			})
 		}
 	}, [isHoliday, startWorkHour, workHour])

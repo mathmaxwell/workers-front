@@ -20,14 +20,10 @@ export interface IWorkSchedule {
 	workSchedule: IWorkScheduleForDay[]
 }
 export interface ITardinessHistory {
-	id: string
-	date: Date
-	fullName: string
-	department: string
+	employeeId: string
 	day: number
 	month: number
 	year: number
-	workSchedule: IWorkScheduleForDay
 	entryHour: number
 	entryMinute: number
 	entryDay: number
@@ -38,4 +34,5 @@ export interface ITardinessHistory {
 	exitDay: number
 	exitMonth: number
 	exitYear: number
+	workSchedule: IWorkScheduleForDay
 }

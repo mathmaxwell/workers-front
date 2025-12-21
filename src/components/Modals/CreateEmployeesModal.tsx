@@ -28,7 +28,7 @@ import {
 } from '../../api/deportament/deportament'
 import type { IDepartment } from '../../types/department/departmentType'
 import { useQuery } from '@tanstack/react-query'
-import { createUser, register } from '../../api/login/login'
+import { createUser } from '../../api/login/login'
 const days = Array.from({ length: 31 }, (_, i) => i + 1)
 const currentYear = new Date().getFullYear()
 const years = Array.from({ length: 70 }, (_, i) => currentYear - i)

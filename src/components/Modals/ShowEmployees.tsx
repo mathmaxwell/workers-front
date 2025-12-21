@@ -35,7 +35,7 @@ const ShowEmployees = () => {
 					top: '50%',
 					left: '50%',
 					transform: 'translate(-50%, -50%)',
-					width: 700,
+					width: 900,
 					bgcolor: theme.palette.background.default,
 					boxShadow: 24,
 					borderRadius: 2,

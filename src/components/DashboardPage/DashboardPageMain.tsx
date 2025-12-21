@@ -43,7 +43,6 @@ const DashboardPageMain = () => {
 		},
 		enabled: !!token,
 	})
-
 	const totalLateTime =
 		employees?.reduce((sum, info) => {
 			return (
@@ -95,7 +94,7 @@ const DashboardPageMain = () => {
 								employees.map(ids => {
 									const diff = getLostTime(ids).diff
 									return {
-										id: ids.id,
+										id: ids.employeeId,
 										description: `${t.late_time}: ${-diff} ${t.minute} `,
 									}
 								})

@@ -89,7 +89,10 @@ const ShowTardinessHistory = ({ id }: { id: string }) => {
 						{t.forward}
 					</Button>
 				</Box>
-				<TableContainer component={Paper} sx={{ height: '51vh' }}>
+				<TableContainer
+					component={Paper}
+					sx={{ height: '51vh', borderRadius: 2 }}
+				>
 					<Table sx={{ minWidth: 650 }} aria-label='calendar table'>
 						<TableHead>
 							<TableRow>
@@ -104,6 +107,8 @@ const ShowTardinessHistory = ({ id }: { id: string }) => {
 
 						<TableBody>
 							{lateEmployeesById?.map((late, ind) => {
+								const isArrived =
+									late.entryHour !== 99 && late.entryMinute !== 99
 								return (
 									<TableRow key={ind}>
 										<TableCell>{`${late.day.toString().padStart(2, '0')}.${(
@@ -116,21 +121,29 @@ const ShowTardinessHistory = ({ id }: { id: string }) => {
 												.toString()
 												.padStart(2, '0')}:00`}
 										</TableCell>
-										<TableCell>{`${late.entryHour
-											.toString()
-											.padStart(2, '0')}:${late.entryMinute
-											.toString()
-											.padStart(2, '0')}`}</TableCell>
+										<TableCell sx={{ color: isArrived ? '' : 'red' }}>
+											{isArrived
+												? `${late.entryHour
+														.toString()
+														.padStart(2, '0')}:${late.entryMinute
+														.toString()
+														.padStart(2, '0')}`
+												: t.not_arrived}
+										</TableCell>
 										<TableCell>
 											{`${late.workSchedule.endHour
 												.toString()
 												.padStart(2, '0')}:00`}
 										</TableCell>
-										<TableCell>{`${late.exitHour
-											.toString()
-											.padStart(2, '0')}:${late.exitMinute
-											.toString()
-											.padStart(2, '0')}`}</TableCell>
+										<TableCell sx={{ color: isArrived ? '' : 'red' }}>
+											{isArrived
+												? `${late.exitHour
+														.toString()
+														.padStart(2, '0')}:${late.exitMinute
+														.toString()
+														.padStart(2, '0')}`
+												: t.not_arrived}
+										</TableCell>
 										<TableCell>
 											{(() => {
 												const { color, diff } = getLostTime(late)

@@ -39,7 +39,6 @@ export default function WeekSchedule({
 	const { t } = useTranslationStore()
 	const theme = useTheme()
 	const { selectedEmployees, closeModal } = useEmployeesSchedule()
-
 	const [schedule, setSchedule] =
 		useState<IWorkScheduleForDay[]>(defaultSchedule)
 	const [selectedId, setSelectedId] = useState<DayId | null>(null)
@@ -187,17 +186,16 @@ export default function WeekSchedule({
 								const date = current.date()
 								const month = current.month() + 1
 								const year = current.year()
-								const template = defaultSchedule.find(
-									s => 'id' in s && s.id === dayOfWeek
-								)
-								const isHoliday = template && 'holiday' in template
+								const template = schedule.find(s => s.id === dayOfWeek)
+								if (!template) {
+									continue
+								}
+								const holiday = isHoliday(template)
 								const workDay: IWorkScheduleForDay = {
 									id: 'create',
 									EmployeeId: employee.id,
-									startHour: isHoliday
-										? 99
-										: (template as any)?.startHour ?? 99,
-									endHour: isHoliday ? 99 : (template as any)?.endHour ?? 99,
+									startHour: holiday ? 99 : template.startHour,
+									endHour: holiday ? 99 : template.endHour,
 									startDay: date,
 									startMonth: month,
 									startYear: year,
